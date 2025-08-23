@@ -1,0 +1,53 @@
+/* ================================
+   Task Table Styles
+   ================================ */
+
+/* Default row text color */
+.table-row-cell {
+    -fx-text-fill: black;
+}
+
+/* ------------------------
+   Task DONE (Green)
+   ------------------------ */
+.task-done {
+    -fx-background-color: #d4edda;   /* light green */
+}
+.task-done:hover {
+    -fx-background-color: derive(#d4edda, -20%);  /* darker green */
+    -fx-font-weight: bold;
+}
+.table-row-cell:filled:selected.task-done {
+    -fx-background-color: derive(#d4edda, -30%);
+    -fx-font-weight: bold;
+}
+
+/* ------------------------
+   Task PENDING (Yellow)
+   ------------------------ */
+.task-pending {
+    -fx-background-color: #fff3cd;   /* light yellow */
+}
+.task-pending:hover {
+    -fx-background-color: derive(#fff3cd, -20%);  /* darker yellow */
+    -fx-font-weight: bold;
+}
+.table-row-cell:filled:selected.task-pending {
+    -fx-background-color: derive(#fff3cd, -30%);
+    -fx-font-weight: bold;
+}
+
+/* ------------------------
+   Task MISSED (Red)
+   ------------------------ */
+.task-missed {
+    -fx-background-color: #f8d7da;   /* light red */
+}
+.task-missed:hover {
+    -fx-background-color: derive(#f8d7da, -20%);  /* darker red */
+    -fx-font-weight: bold;
+}
+.table-row-cell:filled:selected.task-missed {
+    -fx-background-color: derive(#f8d7da, -30%);
+    -fx-font-weight: bold;
+}

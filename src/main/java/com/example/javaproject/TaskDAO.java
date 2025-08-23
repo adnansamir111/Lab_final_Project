@@ -52,4 +52,27 @@ public class TaskDAO {
             e.printStackTrace();
         }
     }
+    public static List<Task> listByCourse(int courseId) {
+        List<Task> list = new ArrayList<>();
+        String sql = "SELECT * FROM task WHERE course_id = ? ORDER BY due_at";
+        try (Connection conn = DB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, courseId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Task t = new Task(
+                        rs.getInt("id"),
+                        rs.getInt("course_id"),
+                        rs.getString("title"),
+                        rs.getString("notes"),
+                        rs.getString("due_at"),
+                        rs.getString("status")
+                );
+                list.add(t);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

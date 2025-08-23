@@ -11,6 +11,9 @@ module com.example.javaproject {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
+    requires java.sql;
+    //requires org.sqlite.jdbc;   // ✅ add this for SQLite
+
     opens com.example.javaproject to javafx.fxml;
     exports com.example.javaproject;
 }

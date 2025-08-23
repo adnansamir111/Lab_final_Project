@@ -1,4 +1,4 @@
-package com.example.javaproject;
+gitpackage com.example.javaproject;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

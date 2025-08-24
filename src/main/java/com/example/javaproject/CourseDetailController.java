@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -67,6 +68,34 @@ public class CourseDetailController {
             colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
             colNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
 
+            // ✅ Wrap text in Title column
+            colTitle.setCellFactory(tc -> new TableCell<>() {
+                private final Text text = new Text();
+                {
+                    text.wrappingWidthProperty().bind(tc.widthProperty());
+                    setGraphic(text);
+                }
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    text.setText(empty || item == null ? "" : item);
+                }
+            });
+
+            // ✅ Wrap text in Notes column
+            colNotes.setCellFactory(tc -> new TableCell<>() {
+                private final Text text = new Text();
+                {
+                    text.wrappingWidthProperty().bind(tc.widthProperty());
+                    setGraphic(text);
+                }
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    text.setText(empty || item == null ? "" : item);
+                }
+            });
+
             // Row styling using CSS classes instead of hardcoded colors
             taskTable.setRowFactory(tv -> new TableRow<>() {
                 @Override
@@ -79,11 +108,14 @@ public class CourseDetailController {
                     if (item != null && !empty) {
                         if ("done".equalsIgnoreCase(item.getStatus())) {
                             getStyleClass().add("task-done");
-                        } else if (item.getDueAt() != null && !item.getDueAt().isEmpty()
-                                && LocalDate.parse(item.getDueAt()).isBefore(LocalDate.now())) {
-                            getStyleClass().add("task-missed");
-                        } else {
-                            getStyleClass().add("task-pending");
+                        } else if ("todo".equalsIgnoreCase(item.getStatus()) ||
+                                "in-progress".equalsIgnoreCase(item.getStatus())) {
+                            if (item.getDueAt() != null && !item.getDueAt().isEmpty()
+                                    && LocalDate.parse(item.getDueAt()).isBefore(LocalDate.now())) {
+                                getStyleClass().add("task-missed"); // overdue
+                            } else {
+                                getStyleClass().add("task-pending"); // active
+                            }
                         }
                     }
                 }
@@ -114,6 +146,7 @@ public class CourseDetailController {
 
         TextArea notesArea = new TextArea();
         notesArea.setPromptText("Notes...");
+        notesArea.setWrapText(true); // ✅ allow wrapping inside dialog
 
         VBox vbox = new VBox(10, new Label("Title:"), titleField,
                 new Label("Deadline:"), duePicker,
@@ -164,6 +197,7 @@ public class CourseDetailController {
         statusBox.setValue(selected.getStatus());
 
         TextArea notesArea = new TextArea(selected.getNotes());
+        notesArea.setWrapText(true); // ✅ wrapping for edit dialog
 
         VBox vbox = new VBox(10, new Label("Title:"), titleField,
                 new Label("Deadline:"), duePicker,

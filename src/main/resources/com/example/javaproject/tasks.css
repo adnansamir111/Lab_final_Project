@@ -2,23 +2,30 @@
    Task Table Styles
    ================================ */
 
-/* Default row text color */
+/* Default row style */
 .table-row-cell {
+    -fx-font-size: 14px;
     -fx-text-fill: black;
+    -fx-border-color: lightgray;
+    -fx-border-width: 0 0 1 0;   /* bottom border only */
+    -fx-border-insets: 0;
 }
 
 /* ------------------------
    Task DONE (Green)
    ------------------------ */
 .task-done {
-    -fx-background-color: #d4edda;   /* light green */
+    -fx-background-color: #d4edda, transparent;   /* row color + transparent layer */
+    -fx-background-insets: 0, 0 0 1 0;            /* leave space for border */
 }
 .task-done:hover {
-    -fx-background-color: derive(#d4edda, -20%);  /* darker green */
+    -fx-background-color: derive(#d4edda, -20%), transparent;
+    -fx-background-insets: 0, 0 0 1 0;
     -fx-font-weight: bold;
 }
 .table-row-cell:filled:selected.task-done {
-    -fx-background-color: derive(#d4edda, -30%);
+    -fx-background-color: derive(#d4edda, -30%), transparent;
+    -fx-background-insets: 0, 0 0 1 0;
     -fx-font-weight: bold;
 }
 
@@ -26,14 +33,17 @@
    Task PENDING (Yellow)
    ------------------------ */
 .task-pending {
-    -fx-background-color: #fff3cd;   /* light yellow */
+    -fx-background-color: #fff3cd, transparent;
+    -fx-background-insets: 0, 0 0 1 0;
 }
 .task-pending:hover {
-    -fx-background-color: derive(#fff3cd, -20%);  /* darker yellow */
+    -fx-background-color: derive(#fff3cd, -20%), transparent;
+    -fx-background-insets: 0, 0 0 1 0;
     -fx-font-weight: bold;
 }
 .table-row-cell:filled:selected.task-pending {
-    -fx-background-color: derive(#fff3cd, -30%);
+    -fx-background-color: derive(#fff3cd, -30%), transparent;
+    -fx-background-insets: 0, 0 0 1 0;
     -fx-font-weight: bold;
 }
 
@@ -41,13 +51,16 @@
    Task MISSED (Red)
    ------------------------ */
 .task-missed {
-    -fx-background-color: #f8d7da;   /* light red */
+    -fx-background-color: #f8d7da, transparent;
+    -fx-background-insets: 0, 0 0 1 0;
 }
 .task-missed:hover {
-    -fx-background-color: derive(#f8d7da, -20%);  /* darker red */
+    -fx-background-color: derive(#f8d7da, -20%), transparent;
+    -fx-background-insets: 0, 0 0 1 0;
     -fx-font-weight: bold;
 }
 .table-row-cell:filled:selected.task-missed {
-    -fx-background-color: derive(#f8d7da, -30%);
+    -fx-background-color: derive(#f8d7da, -30%), transparent;
+    -fx-background-insets: 0, 0 0 1 0;
     -fx-font-weight: bold;
 }

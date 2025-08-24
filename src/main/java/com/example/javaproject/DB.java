@@ -31,25 +31,27 @@ public final class DB {
                 );
             """);
 
+            // Tasks
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS task (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                   course_id INTEGER,
                   title TEXT NOT NULL,
                   notes TEXT,
-                  due_at TEXT,
-                  status TEXT DEFAULT 'todo',
-                  created_at TEXT DEFAULT (datetime('now')),
-                  updated_at TEXT DEFAULT (datetime('now')),
+                  due_at TEXT, -- yyyy-MM-dd
+                  status TEXT DEFAULT 'todo', -- todo, in-progress, done
+                  created_at TEXT DEFAULT (datetime('now', 'localtime')),
+                  updated_at TEXT DEFAULT (datetime('now', 'localtime')),
                   FOREIGN KEY(course_id) REFERENCES course(id)
                 );
             """);
 
+            // Study sessions
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS study_session (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                   course_id INTEGER,
-                  started_at TEXT,
+                  started_at TEXT DEFAULT (datetime('now', 'localtime')),
                   ended_at TEXT,
                   duration_min INTEGER,
                   notes TEXT,

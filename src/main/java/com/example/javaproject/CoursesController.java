@@ -42,7 +42,7 @@ public class CoursesController {
         -fx-border-radius: 10;
         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0,0,3);
     """);
-        card.setPrefSize(240, 180); // slightly bigger card
+        card.setPrefSize(220, 180); // slightly bigger card
 
         // 🔹 Color palette
         String[] colors = {

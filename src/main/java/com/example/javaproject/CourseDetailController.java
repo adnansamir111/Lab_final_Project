@@ -1,5 +1,6 @@
 package com.example.javaproject;
 
+import com.example.javaproject.all_class.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -8,7 +9,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 public class CourseDetailController {
@@ -27,6 +34,7 @@ public class CourseDetailController {
         lblCredits.setText("🎓 Credits: " + course.getCredits());
 
         loadTasks(); // 🔹 load tasks for this course
+        loadSessions();
     }
 
     @FXML
@@ -121,6 +129,14 @@ public class CourseDetailController {
                 }
             });
         }
+        ///
+        if (sessionTable != null) {
+            colStart.setCellValueFactory(new PropertyValueFactory<>("startedAt"));
+            colEnd.setCellValueFactory(new PropertyValueFactory<>("endedAt"));
+            colDuration.setCellValueFactory(new PropertyValueFactory<>("durationMin"));
+            colSessionNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
+        }
+
     }
 
     private void loadTasks() {
@@ -245,4 +261,154 @@ public class CourseDetailController {
             }
         });
     }
+
+   /// start session
+   @FXML private Label lblStopwatch;
+    private long sessionStartTime = 0;      // millis when started/resumed
+    private int accumulatedMinutes = 0;     // time before pause (in minutes)
+    private long accumulatedMillis = 0;     // more precise, for stopwatch
+    private boolean running = false;
+    @FXML private TableView<StudySession> sessionTable;
+    @FXML private TableColumn<StudySession, String> colStart;
+    @FXML private TableColumn<StudySession, String> colEnd;
+    @FXML private TableColumn<StudySession, Integer> colDuration;
+    @FXML private TableColumn<StudySession, String> colSessionNotes;
+
+    private javafx.animation.Timeline stopwatchTimeline;
+    @FXML
+    private void onStartSession() {
+        if (running) {
+            new Alert(Alert.AlertType.WARNING, "Session already running!").show();
+            return;
+        }
+
+        sessionStartTime = System.currentTimeMillis();
+        running = true;
+
+        // start ticking stopwatch
+        stopwatchTimeline = new javafx.animation.Timeline(
+                new javafx.animation.KeyFrame(javafx.util.Duration.seconds(1), e -> updateStopwatchLabel())
+        );
+        stopwatchTimeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
+        stopwatchTimeline.play();
+
+        new Alert(Alert.AlertType.INFORMATION, "Session started/resumed!").show();
+    }
+    @FXML
+    private void onPauseSession() {
+        if (!running) {
+            new Alert(Alert.AlertType.WARNING, "No session running!").show();
+            return;
+        }
+
+        long now = System.currentTimeMillis();
+        accumulatedMillis += (now - sessionStartTime);
+        running = false;
+
+        if (stopwatchTimeline != null) stopwatchTimeline.stop();
+        updateStopwatchLabel();
+
+        new Alert(Alert.AlertType.INFORMATION,
+                "Session paused. Accumulated: " + (accumulatedMillis / 60000) + " min").show();
+    }
+    @FXML
+    private void onFinishSession() {
+        if (running) {
+            long now = System.currentTimeMillis();
+            accumulatedMillis += (now - sessionStartTime);
+            running = false;
+            if (stopwatchTimeline != null) stopwatchTimeline.stop();
+        }
+
+        int totalMinutes = (int)(accumulatedMillis / 60000);
+        if (totalMinutes == 0) {
+            new Alert(Alert.AlertType.WARNING, "No session time recorded!").show();
+            return;
+        }
+
+        // Use ZonedDateTime for accurate time zone handling
+        ZonedDateTime zonedStartTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(sessionStartTime), ZoneId.of("Asia/Dhaka"));  // Correct start time // Adjust to your local time zone
+        ZonedDateTime zonedEndTime = ZonedDateTime.now(ZoneId.of("Asia/Dhaka"));  // Adjust to your local time zone
+
+        // Format the start and end times in AM/PM format
+        String startedAt = zonedStartTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a"));
+        String endedAt = zonedEndTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a"));
+
+        // Create StudySession object
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText("Add notes for this session:");
+        dialog.setContentText("Notes:");
+        String notes = dialog.showAndWait().orElse("");
+
+        StudySession s = new StudySession(0, course.getId(), startedAt, endedAt, totalMinutes, notes);
+        StudySessionDAO.insert(s);
+
+        loadSessions();
+
+        // Reset everything
+        accumulatedMillis = 0;
+        sessionStartTime = 0;
+        lblStopwatch.setText("00:00:00");
+
+        new Alert(Alert.AlertType.INFORMATION, "Session finished and saved!").show();
+    }
+
+    // Helper method to format date-time
+    private String formatDate(String dateTime) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+            Date date = inputFormat.parse(dateTime);
+            return outputFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return dateTime; // return original if parsing fails
+        }
+    }
+
+    private void updateStopwatchLabel() {
+        long elapsed = accumulatedMillis;
+        if (running) {
+            elapsed += (System.currentTimeMillis() - sessionStartTime);
+        }
+
+        long seconds = elapsed / 1000;
+        long hrs = seconds / 3600;
+        long mins = (seconds % 3600) / 60;
+        long secs = seconds % 60;
+
+        lblStopwatch.setText(String.format("%02d:%02d:%02d", hrs, mins, secs));
+    }
+    private void loadSessions() {
+        if (course == null) return;
+
+        List<StudySession> sessions = StudySessionDAO.listByCourse(course.getId());
+        sessionTable.setItems(FXCollections.observableArrayList(sessions));
+    }
+    @FXML
+    private void onDeleteSession() {
+        StudySession selected = sessionTable.getSelectionModel().getSelectedItem();  // Get selected row
+        if (selected == null) {
+            new Alert(Alert.AlertType.WARNING, "Select a session to delete").showAndWait();
+            return;
+        }
+
+        // Confirm deletion
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete session: " + selected.getStartedAt() + "?",
+                ButtonType.YES, ButtonType.NO);
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                // Delete the session from the database
+                StudySessionDAO.delete(selected.getId());
+                loadSessions();  // Reload sessions to reflect deletion
+            }
+        });
+    }
+
+
+
+
+
+
 }

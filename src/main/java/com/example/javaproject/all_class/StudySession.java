@@ -1,6 +1,9 @@
-package com.example.javaproject;
+package com.example.javaproject.all_class;
 
 import javafx.beans.property.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class StudySession {
     private final IntegerProperty id = new SimpleIntegerProperty();
@@ -17,6 +20,18 @@ public class StudySession {
         this.endedAt.set(endedAt);
         this.durationMin.set(durationMin);
         this.notes.set(notes);
+    }
+    /// formating the date
+    private String formatDate(String dateTime) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm a"); // AM/PM format
+            Date date = inputFormat.parse(dateTime);
+            return outputFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return dateTime; // return original if parsing fails
+        }
     }
 
     public int getId() { return id.get(); }

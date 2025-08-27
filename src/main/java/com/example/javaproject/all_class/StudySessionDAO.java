@@ -1,4 +1,6 @@
-package com.example.javaproject;
+package com.example.javaproject.all_class;
+
+import com.example.javaproject.DB;
 
 import java.sql.*;
 import java.util.*;
@@ -42,5 +44,16 @@ public class StudySessionDAO {
             e.printStackTrace();
         }
     }
+    public static void delete(int sessionId) {
+        String sql = "DELETE FROM study_session WHERE id = ?";
+        try (Connection conn = DB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, sessionId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 

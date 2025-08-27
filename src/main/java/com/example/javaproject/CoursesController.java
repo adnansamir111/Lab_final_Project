@@ -1,5 +1,7 @@
 package com.example.javaproject;
 
+import com.example.javaproject.all_class.Course;
+import com.example.javaproject.all_class.CourseDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,12 +38,13 @@ public class CoursesController {
 
     private VBox createCourseCard(Course course) {
         VBox card = new VBox();
-        card.setStyle("""
-        -fx-background-color: white;
-        -fx-background-radius: 10;
-        -fx-border-radius: 10;
-        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0,0,3);
-    """);
+//        card.setStyle("""
+//        -fx-background-color: white;
+//        -fx-background-radius: 10;
+//        -fx-border-radius: 10;
+//        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0,0,3);
+//    """);
+        card.getStyleClass().add("course-card");
         card.setPrefSize(220, 180); // slightly bigger card
 
         // 🔹 Color palette

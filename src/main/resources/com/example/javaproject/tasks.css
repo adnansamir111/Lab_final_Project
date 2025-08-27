@@ -64,3 +64,24 @@
     -fx-background-insets: 0, 0 0 1 0;
     -fx-font-weight: bold;
 }
+
+/* Normal state for the course card */
+.course-card {
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10px;
+    -fx-padding: 15px;
+    -fx-min-width: 200px;
+    -fx-max-width: 300px;
+    -fx-effect: dropshadow(gaussian, #3b0404, 5, 0.5, 0, 0);
+    -fx-cursor: hand;
+}
+
+/* Hover state for the course card */
+.course-card:hover {
+    -fx-background-color: #dde094;
+    -fx-border-color: #3b0404;
+    -fx-effect: dropshadow(gaussian, #3b0404, 10, 0.7, 0, 0);
+}
+

@@ -1,4 +1,4 @@
-package com.example.javaproject;
+package com.example.javaproject.all_class;
 
 import javafx.beans.property.*;
 

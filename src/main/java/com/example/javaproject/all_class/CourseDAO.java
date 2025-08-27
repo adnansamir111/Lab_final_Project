@@ -1,4 +1,6 @@
-package com.example.javaproject;
+package com.example.javaproject.all_class;
+
+import com.example.javaproject.DB;
 
 import java.sql.*;
 import java.util.*;

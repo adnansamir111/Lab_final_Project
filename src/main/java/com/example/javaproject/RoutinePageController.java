@@ -120,6 +120,7 @@ public class RoutinePageController {
             Stage stage = (Stage) addRoutineButton.getScene().getWindow();
             ///stage.setResizable(false);
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -140,6 +141,7 @@ public class RoutinePageController {
             Stage stage = (Stage) addRoutineButton.getScene().getWindow();
             ///stage.setResizable(false);
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

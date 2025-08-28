@@ -84,6 +84,7 @@ public class AddRoutinePageController {
             // Get the current window and set the new scene
             Stage stage = (Stage) courseNameField.getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

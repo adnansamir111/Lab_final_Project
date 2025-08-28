@@ -63,6 +63,7 @@ public class DashboardController {
             // Create a new scene and set it to the current stage
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,7 +80,9 @@ public class DashboardController {
 
             // Create a new scene and set it to the current stage
             Stage stage = (Stage) routineContainer.getScene().getWindow();
+            stage.setMaximized(true);
             stage.setScene(new Scene(root));
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

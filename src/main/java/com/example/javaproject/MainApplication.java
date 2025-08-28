@@ -17,6 +17,8 @@ public class MainApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("welcome");
         stage.setScene(scene);
+        //stage.centerOnScreen();
+        stage.setMaximized(true);
         stage.show();
     }
 

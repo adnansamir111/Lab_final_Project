@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -6,10 +7,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.geometry.Pos?>
-<?import javafx.geometry.Insets?>
 
-<VBox prefHeight="325.0" prefWidth="418.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.AddRoutinePageController" spacing="15" style="-fx-background-color: #f4f6f9; -fx-padding: 20;">
+<VBox prefHeight="475.0" prefWidth="520.0" spacing="15" style="-fx-background-color: #f4f6f9; -fx-padding: 20;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.AddRoutinePageController">
 
     <!-- Title -->
     <Label style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Add Routine Event" />
@@ -21,24 +20,24 @@
     <TextField fx:id="roomField" promptText="Room Number" style="-fx-padding: 10;" />
 
     <!-- Time Inputs -->
-    <HBox spacing="10" alignment="CENTER">
+    <HBox alignment="CENTER" spacing="10">
         <TextField fx:id="startTimeField" prefHeight="25.0" prefWidth="150.0" promptText="Start Time (HH:MM)" style="-fx-padding: 5;" />
         <TextField fx:id="endTimeField" prefHeight="25.0" prefWidth="150.0" promptText="End Time (HH:MM)" style="-fx-padding: 5;" />
     </HBox>
 
     <!-- Day Selection -->
-    <ComboBox fx:id="dayOfWeekComboBox" promptText="Select Day" style="-fx-padding: 10;" />
+    <ComboBox fx:id="dayOfWeekComboBox" promptText="Select Day" style="-fx-padding: 10; -fx-background-color: white; -fx-font-weight: bold; -fx-text-fill: white; -fx-border-color: black;" />
 
     <!-- Add Event Button -->
-    <HBox spacing="10" alignment="CENTER">
-        <Button onAction="#addRoutineEvent" prefHeight="35.0" prefWidth="150.0" text="Add Event" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px; -fx-background-radius: 5;" />
+    <HBox alignment="CENTER" spacing="10">
+        <Button onAction="#addRoutineEvent" prefHeight="35.0" prefWidth="150.0" style="-fx-text-fill: white; -fx-background-color: #4CAF50; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px; -fx-background-radius: 5;" text="Add Event" />
     </HBox>
 
     <!-- Back Button -->
-    <BorderPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" style="-fx-padding: 10;">
+    <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-padding: 10;" VBox.vgrow="ALWAYS">
         <bottom>
-            <HBox prefHeight="40.0" prefWidth="418.0" BorderPane.alignment="CENTER" alignment="CENTER">
-                <Button onAction="#back" prefHeight="35.0" prefWidth="100.0" text="Back" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px; -fx-background-radius: 5;" />
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="418.0" BorderPane.alignment="CENTER">
+                <Button onAction="#back" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px; -fx-background-radius: 5;" text="Back" />
             </HBox>
         </bottom>
     </BorderPane>

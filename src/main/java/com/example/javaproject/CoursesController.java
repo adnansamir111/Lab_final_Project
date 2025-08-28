@@ -146,7 +146,10 @@ public class CoursesController {
             controller.setCourse(course);
 
             Stage stage = (Stage) courseContainer.getScene().getWindow();
+            stage.setMaximized(true);
             stage.getScene().setRoot(root);
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

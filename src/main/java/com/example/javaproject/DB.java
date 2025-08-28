@@ -11,8 +11,12 @@ public final class DB {
             String url = "jdbc:sqlite:./database/student_assistant.db";
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
+            //ENABLE FOREIGN KEY
+            try (Statement st = conn.createStatement()) {
+                st.executeUpdate("PRAGMA foreign_keys = ON;");
+            }
 
-            createSchema(conn); // pass connection
+            createSchema(conn); // Pass connection to schema creation method
             return conn;
         } catch (Exception e) {
             throw new RuntimeException("Database connection failed", e);
@@ -21,7 +25,8 @@ public final class DB {
 
     private static void createSchema(Connection conn) throws SQLException {
         try (Statement st = conn.createStatement()) {
-            // Course table
+
+            // Course Table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS course (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,7 +37,7 @@ public final class DB {
                 );
             """);
 
-            // Tasks table
+            // Tasks Table with Cascading Delete
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS task (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,11 +48,11 @@ public final class DB {
                   status TEXT DEFAULT 'todo', -- todo, in-progress, done
                   created_at TEXT DEFAULT (datetime('now', 'localtime')),
                   updated_at TEXT DEFAULT (datetime('now', 'localtime')),
-                  FOREIGN KEY(course_id) REFERENCES course(id)
+                  FOREIGN KEY(course_id) REFERENCES course(id) ON DELETE CASCADE  -- Cascading delete
                 );
             """);
 
-            // Study session table
+            // Study Session Table with Cascading Delete
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS study_session (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,11 +61,11 @@ public final class DB {
                   ended_at TEXT,
                   duration_min INTEGER,
                   notes TEXT,
-                  FOREIGN KEY(course_id) REFERENCES course(id)
+                  FOREIGN KEY(course_id) REFERENCES course(id) ON DELETE CASCADE  -- Cascading delete
                 );
             """);
 
-            // Routine events table
+            // Routine Events Table (No Cascading for now)
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS routine_events (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,

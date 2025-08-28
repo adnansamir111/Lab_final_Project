@@ -21,6 +21,7 @@ public final class DB {
 
     private static void createSchema(Connection conn) throws SQLException {
         try (Statement st = conn.createStatement()) {
+            // Course table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS course (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,7 +32,7 @@ public final class DB {
                 );
             """);
 
-            // Tasks
+            // Tasks table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS task (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,7 +47,7 @@ public final class DB {
                 );
             """);
 
-            // Study sessions
+            // Study session table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS study_session (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,6 +57,18 @@ public final class DB {
                   duration_min INTEGER,
                   notes TEXT,
                   FOREIGN KEY(course_id) REFERENCES course(id)
+                );
+            """);
+
+            // Routine events table
+            st.executeUpdate("""
+                CREATE TABLE IF NOT EXISTS routine_events (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  course_name TEXT NOT NULL,
+                  start_time TEXT NOT NULL,  -- Stored as TIME (HH:mm)
+                  end_time TEXT NOT NULL,    -- Stored as TIME (HH:mm)
+                  room TEXT,
+                  day_of_week TEXT NOT NULL -- e.g., MONDAY, TUESDAY, etc.
                 );
             """);
         }

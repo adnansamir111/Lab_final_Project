@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
+
+    <!-- Sidebar (Left side) -->
+    <left>
+        <VBox prefHeight="182.0" prefWidth="172.0" style="-fx-background-color: #2F4F4F; -fx-padding: 20; -fx-spacing: 20;">
+            <Button onAction="#goToRoutinePage" prefHeight="40.0" prefWidth="125.0" style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;" text="Go to Routine">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
+            <Button onAction="#goToCoursePage" prefHeight="40.0" prefWidth="125.0" style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;" text="Go to COURSE" wrapText="true">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font></Button>
+            <Button onAction="#goToSessionsPage" prefHeight="40.0" prefWidth="127.0" style="-fx-font-size: 14px; -fx-font-style: bold; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10;" text="Go to Sessions">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font></Button>
+        </VBox>
+    </left>
+
+    <!-- Main Content Area (Right side) -->
+    <center>
+        <ScrollPane prefHeight="700.0" prefWidth="700.0">
+            <VBox style="-fx-padding: 20; -fx-background-color: #f4f4f4;">
+                <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 10;" text="Today's Routine" />
+
+                <!-- Today's routine displayed here -->
+                <TilePane fx:id="routineContainer" hgap="10" style="-fx-padding: 10;" vgap="10" />
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

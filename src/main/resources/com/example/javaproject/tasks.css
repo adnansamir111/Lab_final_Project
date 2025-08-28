@@ -84,4 +84,118 @@
     -fx-border-color: #3b0404;
     -fx-effect: dropshadow(gaussian, #3b0404, 10, 0.7, 0, 0);
 }
+/* Green Button Style */
+.greenButton {
+    -fx-background-color: #4CAF50; /* Green background */
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-effect: dropshadow(gaussian, #000000, 8, 0.5, 0, 2);
+}
+
+/* Hover effect for Green Button */
+.greenButton:hover {
+    -fx-background-color: #388E3C; /* Darker green on hover */
+    -fx-effect: dropshadow(gaussian, #000000, 10, 0.5, 0, 2); /* Shadow effect on hover */
+
+}
+
+/* Focus effect for Green Button */
+.greenButton:focused {
+    -fx-background-color: #388E3C; /* Darker green on focus */
+}
+
+/* Clicked effect for Green Button */
+.greenButton:pressed {
+    -fx-background-color: #2C6B2F; /* Even darker when clicked */
+    -fx-effect: dropshadow(gaussian, #000000, 12, 0.6, 0, 2); /* More intense shadow */
+}
+
+/* Yellow Button Style */
+.yellowButton {
+    -fx-background-color: #FFEB3B; /* Yellow background */
+    -fx-text-fill: black;
+    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-effect: dropshadow(gaussian, #000000, 8, 0.5, 0, 2);
+}
+
+/* Hover effect for Yellow Button */
+.yellowButton:hover {
+    -fx-background-color: #FBC02D; /* Darker yellow on hover */
+    -fx-effect: dropshadow(gaussian, #000000, 10, 0.5, 0, 2);
+
+}
+
+/* Focus effect for Yellow Button */
+.yellowButton:focused {
+    -fx-background-color: #FBC02D; /* Darker yellow on focus */
+}
+
+/* Clicked effect for Yellow Button */
+.yellowButton:pressed {
+    -fx-background-color: #F57F17; /* Even darker when clicked */
+    -fx-effect: dropshadow(gaussian, #000000, 12, 0.6, 0, 2);
+}
+
+/* Red Button Style */
+.redButton {
+    -fx-background-color: #E53935; /* Red background */
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-effect: dropshadow(gaussian, #000000, 8, 0.5, 0, 2);
+}
+
+/* Hover effect for Red Button */
+.redButton:hover {
+    -fx-background-color: #D32F2F; /* Darker red on hover */
+    -fx-effect: dropshadow(gaussian, #000000, 10, 0.5, 0, 2);
+    -fx-transform: scale(1.1);
+}
+
+/* Focus effect for Red Button */
+.redButton:focused {
+    -fx-background-color: #D32F2F; /* Darker red on focus */
+}
+
+/* Clicked effect for Red Button */
+.redButton:pressed {
+    -fx-background-color: #C62828; /* Even darker when clicked */
+    -fx-effect: dropshadow(gaussian, #000000, 12, 0.6, 0, 2);
+}
+/* Blue Button Style */
+.blueButton {
+    -fx-background-color: #2196F3; /* Blue background */
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #000000, 8, 0.5, 0, 2); /* Shadow effect */
+}
+
+/* Hover effect for Blue Button */
+.blueButton:hover {
+    -fx-background-color: #042240; /* Darker blue on hover */
+    -fx-effect: dropshadow(gaussian, #000000, 10, 0.5, 0, 2); /* More shadow on hover */
+
+}
+
+/* Focus effect for Blue Button */
+.blueButton:focused {
+    -fx-background-color: #042240; /* Darker blue on focus */
+}
+
+/* Clicked effect for Blue Button */
+.blueButton:pressed {
+    -fx-background-color: #042240; /* Even darker when clicked */
+    -fx-effect: dropshadow(gaussian, #000000, 12, 0.6, 0, 2); /* More intense shadow */
+}
+
+
+
 

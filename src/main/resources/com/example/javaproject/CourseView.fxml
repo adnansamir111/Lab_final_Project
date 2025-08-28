@@ -14,16 +14,16 @@
     <!-- Top Toolbar -->
     <top>
         <ToolBar>
-            <Label prefHeight="27.0" prefWidth="94.0" style="-fx-font-size:18; -fx-font-weight:bold;" text="📚 Courses" wrapText="true" />
+            <Label prefHeight="47.0" prefWidth="173.0" style="-fx-font-size:18; -fx-font-weight:bold;" styleClass="blueButton" text="📚 Courses" wrapText="true" />
             <Pane HBox.hgrow="ALWAYS" />
-            <Button onAction="#onAdd" text="➕ Add Course" />
+            <Button onAction="#onAdd" styleClass="greenButton" text="➕ Add Course" />
         </ToolBar>
     </top>
 
     <!-- Main Content: course cards grid -->
     <center>
         <ScrollPane fitToWidth="true" prefHeight="422.0" prefWidth="537.0">
-            <TilePane fx:id="courseContainer" hgap="20" prefColumns="3" prefHeight="482.0" prefWidth="625.0" style="-fx-padding:20;" vgap="20">
+            <TilePane fx:id="courseContainer" hgap="20" prefColumns="3" prefHeight="471.0" prefWidth="625.0" style="-fx-padding:20;" vgap="20">
                 <!-- Cards will be added here dynamically -->
             </TilePane>
         </ScrollPane>

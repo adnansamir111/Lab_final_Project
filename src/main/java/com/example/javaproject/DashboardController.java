@@ -22,10 +22,10 @@ import java.util.List;
 public class DashboardController {
 
     @FXML
-    private TilePane routineContainer;  // Today's routine
+    private TilePane routineContainer; // Today's routine
 
     @FXML
-    private VBox taskContainer;         // Next 3 Days' tasks
+    private VBox taskContainer; // Next 3 Days' tasks
 
     @FXML
     private VBox notificationContainer; // Notifications
@@ -40,7 +40,7 @@ public class DashboardController {
 
     // ==================== Today's Routine ====================
     public void displayTodayRoutine() {
-        String today = LocalDate.now().getDayOfWeek().toString();  // e.g. MONDAY
+        String today = LocalDate.now().getDayOfWeek().toString(); // e.g. MONDAY
         List<Routine> routines = RoutineDAO.getRoutineForToDay(today);
 
         for (Routine routine : routines) {
@@ -64,7 +64,8 @@ public class DashboardController {
 
     // ==================== Next 3 Days Tasks ====================
     private void loadUpcomingTasks() {
-        if (taskContainer == null) return;
+        if (taskContainer == null)
+            return;
         taskContainer.getChildren().clear();
 
         List<Task> tasks = TaskDAO.getUpcomingTasks(3); // Fetch tasks for next 3 days
@@ -73,7 +74,7 @@ public class DashboardController {
             card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 10; "
                     + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);");
 
-            Label name = new Label(task.getTitle());   // ✅ fixed
+            Label name = new Label(task.getTitle()); // ✅ fixed
             name.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
             Label due = new Label("Due: " + task.getDueAt()); // ✅ fixed
             Label status = new Label("Status: " + task.getStatus());
@@ -85,7 +86,8 @@ public class DashboardController {
 
     // ==================== Notifications ====================
     private void loadNotifications() {
-        if (notificationContainer == null) return;
+        if (notificationContainer == null)
+            return;
         notificationContainer.getChildren().clear();
 
         List<Task> dueTasks = TaskDAO.getDueReminders(); // Fetch due/past-due tasks
@@ -141,6 +143,21 @@ public class DashboardController {
         } catch (IOException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Failed to load Notifications page.", ButtonType.OK).show();
+        }
+    }
+
+    // ================= Analytics Page =================================
+    @FXML
+    private void goToAnalyticsPage() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("AnalyticsView.fxml"));
+            Stage stage = (Stage) routineContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Failed to load Analytics page.", ButtonType.OK).show();
         }
     }
 

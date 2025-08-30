@@ -17,6 +17,10 @@ public class Course {
         this.credits.set(credits);
     }
 
+    @Override
+    public String toString() {
+        return getTitle();
+    }
     // Getters and property methods (needed for JavaFX binding)
     public int getId() { return id.get(); }
     public IntegerProperty idProperty() { return id; }

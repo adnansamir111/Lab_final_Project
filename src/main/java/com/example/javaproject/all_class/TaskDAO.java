@@ -110,22 +110,76 @@ public class TaskDAO {
 
     // ==================== List by Course ====================
     public static List<Task> listByCourse(int courseId) {
-        List<Task> list = new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
         String sql = "SELECT * FROM task WHERE course_id = ? ORDER BY due_at";
         try (Connection conn = DB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, courseId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(mapResultSet(rs));
+                tasks.add(mapResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return tasks;
     }
 
-    // ==================== Helper ====================
+    // ==================== List by Date ====================
+    public static List<Task> listByDate(String date) {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM task WHERE DATE(due_at) = DATE(?) ORDER BY due_at";
+        try (Connection conn = DB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, date);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                tasks.add(mapResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
+    // ==================== List by Date Range ====================
+    public static List<Task> listByDateRange(String start, String end) {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM task WHERE DATE(due_at) BETWEEN DATE(?) AND DATE(?) ORDER BY due_at";
+        try (Connection conn = DB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, start);
+            ps.setString(2, end);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                tasks.add(mapResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
+    // ==================== List by Course and Date Range ====================
+    public static List<Task> listByCourseAndDateRange(int courseId, String start, String end) {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM task WHERE course_id = ? AND DATE(due_at) BETWEEN DATE(?) AND DATE(?) ORDER BY due_at";
+        try (Connection conn = DB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, courseId);
+            ps.setString(2, start);
+            ps.setString(3, end);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                tasks.add(mapResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
+    // ==================== Helper Method to Map ResultSet to Task ====================
     private static Task mapResultSet(ResultSet rs) throws SQLException {
         return new Task(
                 rs.getInt("id"),
@@ -139,6 +193,7 @@ public class TaskDAO {
                 rs.getString("completed_at")
         );
     }
+    //update
     public static void update(Task t) {
         String sql = "UPDATE task SET title=?, notes=?, due_at=?, status=? WHERE id=?";
         try (Connection conn = DB.getConnection();
@@ -153,6 +208,5 @@ public class TaskDAO {
             e.printStackTrace();
         }
     }
-
 
 }

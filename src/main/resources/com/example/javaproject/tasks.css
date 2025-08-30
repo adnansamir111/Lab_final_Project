@@ -154,7 +154,7 @@
 .redButton:hover {
     -fx-background-color: #D32F2F; /* Darker red on hover */
     -fx-effect: dropshadow(gaussian, #000000, 10, 0.5, 0, 2);
-    -fx-transform: scale(1.1);
+
 }
 
 /* Focus effect for Red Button */
@@ -195,6 +195,7 @@
     -fx-background-color: #042240; /* Even darker when clicked */
     -fx-effect: dropshadow(gaussian, #000000, 12, 0.6, 0, 2); /* More intense shadow */
 }
+
 
 
 

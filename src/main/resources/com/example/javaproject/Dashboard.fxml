@@ -4,39 +4,29 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="900.0"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.javaproject.DashboardController">
+<BorderPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
 
     <!-- Sidebar (Left side) -->
     <left>
-        <VBox prefHeight="182.0" prefWidth="172.0"
-              style="-fx-background-color: #2F4F4F; -fx-padding: 20; -fx-spacing: 20;">
-            <Button onAction="#goToRoutinePage" prefHeight="40.0" prefWidth="125.0"
-                    style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;"
-                    text="Go to Routine">
+        <VBox prefHeight="182.0" prefWidth="172.0" style="-fx-background-color: #2F4F4F; -fx-padding: 20; -fx-spacing: 20;">
+            <Button onAction="#goToRoutinePage" prefHeight="40.0" prefWidth="134.0" style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;" text="Go to Routine">
                 <font>
-                    <Font name="System Bold" size="12.0"/>
+                    <Font name="System Bold" size="12.0" />
                 </font>
             </Button>
-            <Button onAction="#goToCoursePage" prefHeight="40.0" prefWidth="125.0"
-                    style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;"
-                    text="Go to COURSE" wrapText="true">
+            <Button onAction="#goToCoursePage" prefHeight="40.0" prefWidth="134.0" style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;" text="Go to COURSE" wrapText="true">
                 <font>
-                    <Font name="Arial Bold" size="12.0"/>
+                    <Font name="Arial Bold" size="12.0" />
                 </font>
             </Button>
-            <Button onAction="#goToSessionsPage" prefHeight="40.0" prefWidth="127.0"
-                    style="-fx-font-size: 14px; -fx-font-style: bold; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10;"
-                    text="Go to Sessions">
+            <Button onAction="#goToTaskExplorerPage" prefHeight="40.0" prefWidth="135.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10;" text="TASK EXPLORER" wrapText="true">
                 <font>
-                    <Font name="Arial Bold" size="12.0"/>
+                    <Font name="Arial Black" size="12.0" />
                 </font>
             </Button>
         </VBox>
@@ -44,41 +34,35 @@
 
     <!-- Main Content Area (Right side) -->
     <center>
-        <ScrollPane prefHeight="700.0" prefWidth="700.0" fitToWidth="true">
+        <ScrollPane fitToWidth="true" prefHeight="700.0" prefWidth="700.0">
             <content>
-                <VBox style="-fx-padding: 20; -fx-background-color: #f4f4f4; -fx-spacing: 25;">
-
-                    <!-- Today's Routine -->
-                    <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;"
-                           text="Today's Routine"/>
-                    <TilePane fx:id="routineContainer" hgap="10" vgap="10"
-                              style="-fx-padding: 10;"/>
+                <VBox style="-fx-padding: 20; -fx-background-color: #f4f4f4; -fx-spacing: 5;">
+               <HBox prefHeight="23.0" prefWidth="685.0" style="-fx-padding: 0;">
+                  <children>
+      
+                          <!-- Today's Routine -->
+                          <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;" text="Today's Routine" />
+                     <Label fx:id="routineHeader" prefHeight="36.0" prefWidth="197.0" style="-fx-padding: 5; -fx-font-size: 20; -fx-font-weight: bold;" text="DAY" />
+                  </children>
+               </HBox>
+                    <TilePane fx:id="routineContainer" hgap="10" prefHeight="80.0" prefWidth="685.0" style="-fx-padding: 10;" vgap="10" />
 
                     <!-- Next 3 Days Tasks -->
-                    <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;"
-                           text="📅 Next 3 Days’ Tasks"/>
-                    <ScrollPane fitToWidth="true" prefHeight="180"
-                                style="-fx-background-color: transparent;">
+                    <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;" text="📅 Next 3 Days’ Tasks" />
+                    <ScrollPane fitToWidth="true" prefHeight="180" style="-fx-background-color: transparent;">
                         <content>
-                            <VBox fx:id="taskContainer" spacing="12"
-                                  style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8;
-                                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
+                            <VBox fx:id="taskContainer" spacing="12" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8;                                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
                             </VBox>
                         </content>
                     </ScrollPane>
 
                     <!-- Notifications Panel -->
                     <HBox alignment="CENTER_LEFT" spacing="20">
-                        <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="🔔 Notifications"/>
-                        <Button text="View All" onAction="#handleViewAllNotifications"
-                                style="-fx-background-color: #2F4F4F; -fx-text-fill: white; -fx-background-radius: 5; -fx-padding: 5 12;"/>
+                        <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="🔔 Notifications" />
                     </HBox>
-                    <ScrollPane fitToWidth="true" prefHeight="150"
-                                style="-fx-background-color: transparent;">
+                    <ScrollPane fitToWidth="true" prefHeight="150" style="-fx-background-color: transparent;">
                         <content>
-                            <VBox fx:id="notificationContainer" spacing="12"
-                                  style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8;
-                                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
+                            <VBox fx:id="notificationContainer" spacing="12" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8;                                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
                             </VBox>
                         </content>
                     </ScrollPane>

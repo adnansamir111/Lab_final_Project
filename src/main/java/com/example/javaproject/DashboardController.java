@@ -30,6 +30,9 @@ public class DashboardController {
     @FXML
     private VBox notificationContainer; // Notifications
 
+    @FXML
+    private Label routineHeader;
+
     // ==================== Initialize ====================
     @FXML
     public void initialize() {
@@ -40,25 +43,53 @@ public class DashboardController {
 
     // ==================== Today's Routine ====================
     public void displayTodayRoutine() {
-        String today = LocalDate.now().getDayOfWeek().toString();  // e.g. MONDAY
-        List<Routine> routines = RoutineDAO.getRoutineForToDay(today);
+        // Get today's day name (e.g., Monday)
+        String todayName = LocalDate.now().getDayOfWeek()
+                .getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.ENGLISH);
 
+        // Update the header label dynamically (you should have fx:id for routine header in FXML)
+        routineHeader.setText(" "+todayName);
+        routineHeader.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;");
+
+        // Clear previous routines
+        routineContainer.getChildren().clear();
+
+        // Fetch routines for today (database stores MONDAY, TUESDAY etc.)
+        List<Routine> routines = RoutineDAO.getRoutineForToDay(todayName.toUpperCase());
+
+        // Add each routine card
         for (Routine routine : routines) {
             VBox routineCard = createRoutineCard(routine);
             routineContainer.getChildren().add(routineCard);
         }
+
+        // If no classes today
+        if (routines.isEmpty()) {
+            Label emptyMsg = new Label("✅ No classes today!");
+            emptyMsg.setStyle("-fx-text-fill: #888; -fx-font-size: 14px; -fx-font-style: italic;");
+            routineContainer.getChildren().add(emptyMsg);
+        }
     }
 
     private VBox createRoutineCard(Routine routine) {
-        VBox card = new VBox();
-        card.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-radius: 8; "
-                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.5, 0, 0);");
+        VBox card = new VBox(6);
+        card.setPrefWidth(200);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 12; "
+                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);");
 
-        Label courseNameLabel = new Label("Course: " + routine.getCourseName());
-        Label timeLabel = new Label("Time: " + routine.getStartTime() + " - " + routine.getEndTime());
-        Label roomLabel = new Label("Room: " + routine.getRoom());
+        // Course Name
+        Label courseName = new Label(routine.getCourseName());
+        courseName.setStyle("-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #2F4F4F;");
 
-        card.getChildren().addAll(courseNameLabel, timeLabel, roomLabel);
+        // Time Range
+        Label time = new Label("🕒 " + routine.getStartTime() + " - " + routine.getEndTime());
+        time.setStyle("-fx-text-fill: #555; -fx-font-size: 13px;");
+
+        // Room
+        Label room = new Label("Room- " + routine.getRoom());
+        room.setStyle("-fx-text-fill: #666; -fx-font-size: 13px;");
+
+        card.getChildren().addAll(courseName, time, room);
         return card;
     }
 
@@ -69,19 +100,58 @@ public class DashboardController {
 
         List<Task> tasks = TaskDAO.getUpcomingTasks(3); // Fetch tasks for next 3 days
         for (Task task : tasks) {
-            HBox card = new HBox(15);
-            card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 10; "
-                    + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+            HBox card = new HBox(30); // spacing between fields
+            card.setStyle("-fx-background-radius: 8; -fx-padding: 10; "
+                    + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);");
 
-            Label name = new Label(task.getTitle());   // ✅ fixed
+            // ✅ Background color by status
+            String bgColor;
+            if ("done".equalsIgnoreCase(task.getStatus())) {
+                bgColor = "#d4edda"; // soft green
+            } else if ("todo".equalsIgnoreCase(task.getStatus())) {
+                bgColor = "#fff3cd"; // soft yellow
+            } else if ("in-progress".equalsIgnoreCase(task.getStatus())) {
+                bgColor = "#cce5ff"; // soft blue
+            } else {
+                // check overdue
+                try {
+                    LocalDate dueDate = LocalDate.parse(task.getDueAt());
+                    if (dueDate.isBefore(LocalDate.now())) {
+                        bgColor = "#f8d7da"; // soft red
+                    } else {
+                        bgColor = "#e2e3e5"; // neutral gray
+                    }
+                } catch (Exception e) {
+                    bgColor = "#e2e3e5"; // fallback
+                }
+            }
+            card.setStyle(card.getStyle() + "-fx-background-color: " + bgColor + ";");
+
+            // ✅ Title (bold)
+            Label name = new Label(task.getTitle());
             name.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-            Label due = new Label("Due: " + task.getDueAt()); // ✅ fixed
-            Label status = new Label("Status: " + task.getStatus());
 
+            // ✅ Due Date + Day (bold)
+            String dueLabelText = "Due: " + task.getDueAt();
+            try {
+                LocalDate dueDate = LocalDate.parse(task.getDueAt());
+                String dayName = dueDate.getDayOfWeek()
+                        .getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.ENGLISH);
+                dueLabelText += " (" + dayName + ")";
+            } catch (Exception e) { /* ignore */ }
+            Label due = new Label(dueLabelText);
+            due.setStyle("-fx-font-weight: bold; -fx-font-size: 13px;");
+
+            // ✅ Status
+            Label status = new Label("Status: " + task.getStatus());
+            status.setStyle("-fx-text-fill: #444; -fx-font-size: 13px;");
+
+            // Add all in one line
             card.getChildren().addAll(name, due, status);
             taskContainer.getChildren().add(card);
         }
     }
+
 
     // ==================== Notifications ====================
     private void loadNotifications() {
@@ -176,9 +246,9 @@ public class DashboardController {
     }
 
     @FXML
-    private void goToSessionsPage() {
+    private void goToTaskExplorerPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("SessionsPage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("TaskExplorer.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             stage.setScene(new Scene(root));

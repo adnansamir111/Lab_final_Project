@@ -63,4 +63,14 @@ public class Task {
     public String getCompletedAt() { return completedAt.get(); }
     public void setCompletedAt(String value) { completedAt.set(value); }
     public StringProperty completedAtProperty() { return completedAt; }
+    public String getCourseName() {
+        String courseName = "";
+        try {
+            // Fetch course name from CourseDAO using course_id
+            courseName = CourseDAO.getCourseNameById(this.getCourseId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return courseName;
+    }
 }

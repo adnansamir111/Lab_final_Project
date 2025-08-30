@@ -4,12 +4,18 @@ import java.time.LocalTime;
 
 public class Routine {
 
+    // DB primary key (auto-increment in routine_events)
+    private int id;
+
     private String courseName;
     private LocalTime startTime;
     private LocalTime endTime;
     private String room;
-    private String dayOfWeek;  // Store the day of the week (e.g., "MONDAY")
-    private int userId; // Optional, if you're tracking user data
+    // Store the day of the week (whatever string you save: MONDAY, Tuesday, etc.)
+    private String dayOfWeek;
+
+    // Optional (present in your original)
+    private int userId;
 
     // Constructor with dayOfWeek
     public Routine(String courseName, LocalTime startTime, LocalTime endTime, String room, String dayOfWeek) {
@@ -20,11 +26,18 @@ public class Routine {
         this.dayOfWeek = dayOfWeek;
     }
 
-    // Getters and setters for all fields
+    // ---- id getter/setter ----
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    // ---- existing getters/setters ----
     public String getCourseName() {
         return courseName;
     }
-
     public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
@@ -32,7 +45,6 @@ public class Routine {
     public LocalTime getStartTime() {
         return startTime;
     }
-
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
@@ -40,7 +52,6 @@ public class Routine {
     public LocalTime getEndTime() {
         return endTime;
     }
-
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
@@ -48,7 +59,6 @@ public class Routine {
     public String getRoom() {
         return room;
     }
-
     public void setRoom(String room) {
         this.room = room;
     }
@@ -56,10 +66,14 @@ public class Routine {
     public String getDayOfWeek() {
         return dayOfWeek;
     }
-
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 
-
+    public int getUserId() {
+        return userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }

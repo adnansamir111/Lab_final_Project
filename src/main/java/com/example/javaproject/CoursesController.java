@@ -2,9 +2,11 @@ package com.example.javaproject;
 
 import com.example.javaproject.all_class.Course;
 import com.example.javaproject.all_class.CourseDAO;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -153,6 +155,23 @@ public class CoursesController {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+    @FXML
+    void onBack(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) courseContainer.getScene().getWindow();
+            stage.setMaximized(true);
+            stage.setScene(new Scene(root));
+            stage.show();
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
 

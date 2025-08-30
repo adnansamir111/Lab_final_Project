@@ -6,37 +6,85 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
+<BorderPane prefHeight="700.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.javaproject.DashboardController">
 
     <!-- Sidebar (Left side) -->
     <left>
-        <VBox prefHeight="182.0" prefWidth="172.0" style="-fx-background-color: #2F4F4F; -fx-padding: 20; -fx-spacing: 20;">
-            <Button onAction="#goToRoutinePage" prefHeight="40.0" prefWidth="125.0" style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;" text="Go to Routine">
-            <font>
-               <Font name="System Bold" size="12.0" />
-            </font></Button>
-            <Button onAction="#goToCoursePage" prefHeight="40.0" prefWidth="125.0" style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;" text="Go to COURSE" wrapText="true">
-            <font>
-               <Font name="Arial Bold" size="12.0" />
-            </font></Button>
-            <Button onAction="#goToSessionsPage" prefHeight="40.0" prefWidth="127.0" style="-fx-font-size: 14px; -fx-font-style: bold; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10;" text="Go to Sessions">
-            <font>
-               <Font name="Arial Bold" size="12.0" />
-            </font></Button>
+        <VBox prefHeight="182.0" prefWidth="172.0"
+              style="-fx-background-color: #2F4F4F; -fx-padding: 20; -fx-spacing: 20;">
+            <Button onAction="#goToRoutinePage" prefHeight="40.0" prefWidth="125.0"
+                    style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;"
+                    text="Go to Routine">
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
+            </Button>
+            <Button onAction="#goToCoursePage" prefHeight="40.0" prefWidth="125.0"
+                    style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold;"
+                    text="Go to COURSE" wrapText="true">
+                <font>
+                    <Font name="Arial Bold" size="12.0"/>
+                </font>
+            </Button>
+            <Button onAction="#goToSessionsPage" prefHeight="40.0" prefWidth="127.0"
+                    style="-fx-font-size: 14px; -fx-font-style: bold; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10;"
+                    text="Go to Sessions">
+                <font>
+                    <Font name="Arial Bold" size="12.0"/>
+                </font>
+            </Button>
         </VBox>
     </left>
 
     <!-- Main Content Area (Right side) -->
     <center>
-        <ScrollPane prefHeight="700.0" prefWidth="700.0">
-            <VBox style="-fx-padding: 20; -fx-background-color: #f4f4f4;">
-                <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 10;" text="Today's Routine" />
+        <ScrollPane prefHeight="700.0" prefWidth="700.0" fitToWidth="true">
+            <content>
+                <VBox style="-fx-padding: 20; -fx-background-color: #f4f4f4; -fx-spacing: 25;">
 
-                <!-- Today's routine displayed here -->
-                <TilePane fx:id="routineContainer" hgap="10" style="-fx-padding: 10;" vgap="10" />
-            </VBox>
+                    <!-- Today's Routine -->
+                    <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;"
+                           text="Today's Routine"/>
+                    <TilePane fx:id="routineContainer" hgap="10" vgap="10"
+                              style="-fx-padding: 10;"/>
+
+                    <!-- Next 3 Days Tasks -->
+                    <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;"
+                           text="📅 Next 3 Days’ Tasks"/>
+                    <ScrollPane fitToWidth="true" prefHeight="180"
+                                style="-fx-background-color: transparent;">
+                        <content>
+                            <VBox fx:id="taskContainer" spacing="12"
+                                  style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8;
+                                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
+                            </VBox>
+                        </content>
+                    </ScrollPane>
+
+                    <!-- Notifications Panel -->
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="🔔 Notifications"/>
+                        <Button text="View All" onAction="#handleViewAllNotifications"
+                                style="-fx-background-color: #2F4F4F; -fx-text-fill: white; -fx-background-radius: 5; -fx-padding: 5 12;"/>
+                    </HBox>
+                    <ScrollPane fitToWidth="true" prefHeight="150"
+                                style="-fx-background-color: transparent;">
+                        <content>
+                            <VBox fx:id="notificationContainer" spacing="12"
+                                  style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8;
+                                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
+                            </VBox>
+                        </content>
+                    </ScrollPane>
+
+                </VBox>
+            </content>
         </ScrollPane>
     </center>
 </BorderPane>

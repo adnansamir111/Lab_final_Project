@@ -37,7 +37,8 @@ public final class DB {
                 );
             """);
 
-            // Tasks Table with Cascading Delete
+
+                        // Tasks Table with Cascading Delete + notification fields
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS task (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,11 +47,19 @@ public final class DB {
                   notes TEXT,
                   due_at TEXT, -- yyyy-MM-dd
                   status TEXT DEFAULT 'todo', -- todo, in-progress, done
+                  seen_3days INTEGER DEFAULT 0, -- reminder shown 3 days before
+                  seen_dayof INTEGER DEFAULT 0, -- reminder shown on due date
+                  completed_at TEXT, -- yyyy-MM-dd
                   created_at TEXT DEFAULT (datetime('now', 'localtime')),
                   updated_at TEXT DEFAULT (datetime('now', 'localtime')),
-                  FOREIGN KEY(course_id) REFERENCES course(id) ON DELETE CASCADE  -- Cascading delete
+                  FOREIGN KEY(course_id) REFERENCES course(id) ON DELETE CASCADE
                 );
             """);
+
+            // If task table already exists, try adding missing columns
+            try { st.executeUpdate("ALTER TABLE task ADD COLUMN seen_3days INTEGER DEFAULT 0"); } catch (SQLException ignored) {}
+            try { st.executeUpdate("ALTER TABLE task ADD COLUMN seen_dayof INTEGER DEFAULT 0"); } catch (SQLException ignored) {}
+            try { st.executeUpdate("ALTER TABLE task ADD COLUMN completed_at TEXT"); } catch (SQLException ignored) {}
 
             // Study Session Table with Cascading Delete
             st.executeUpdate("""

@@ -285,7 +285,9 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("GradeSheet.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            GradeSheetController controller = loader.getController();
+            controller.setParent(stage.getScene());
+            stage.setScene(new Scene(root, stage.getWidth(), stage.getHeight()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();

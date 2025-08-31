@@ -54,6 +54,11 @@ public class AnalyticsController {
         // Populate the course list with a dummy "ALL" entry and real courses.
         loadCourses();
 
+        weekStartPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                loadChartForWeek(newValue, newValue.plusDays(6)); // Load chart for the selected week
+            }
+        });
         // Remove automatic refresh when a course is selected
         // courseComboBox.getSelectionModel().selectedItemProperty().addListener((obs,
         // oldVal, newVal) -> handleRefresh());

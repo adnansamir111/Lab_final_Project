@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class GradeSheetController {
+    Scene parent;
 
     @FXML private TableView<Course> tableGrade;
 
@@ -35,6 +36,10 @@ public class GradeSheetController {
     @FXML private Button btnBack;
 
     private final ObservableList<Course> data = FXCollections.observableArrayList();
+
+    public void setParent(Scene parent) {
+        this.parent = parent;
+    }
 
     @FXML
     private void initialize() {
@@ -104,9 +109,13 @@ public class GradeSheetController {
     @FXML
     private void onBack() throws IOException {
         Stage stage = (Stage) tableGrade.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("Dashboard.fxml"));
-        stage.setScene(new Scene(root));
-        stage.show();
+        //Parent root = FXMLLoader.load(parent);
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+        stage.setScene(parent);
+        stage.setWidth(width);
+        stage.setHeight(height);
+        //stage.show();
     }
 
     public void reload() {

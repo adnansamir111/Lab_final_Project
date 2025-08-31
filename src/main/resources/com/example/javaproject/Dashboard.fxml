@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController" stylesheets="@tasks.css">
+<BorderPane prefHeight="700.0" prefWidth="900.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
 
     <!-- Sidebar (Left side) -->
     <left>
@@ -41,7 +41,7 @@
 
 
             <!-- New GradeSheet button with hover effect -->
-            <Button onAction="#goToGradeSheetPage" prefHeight="40.0" prefWidth="160.0" styleClass="dashboard-button" text="Go to GradeSheet"/>
+            <Button onAction="#goToGradeSheetPage" prefHeight="40.0" prefWidth="160.0" styleClass="dashboard-button" text="Go to GradeSheet" />
 
         </VBox>
     </left>
@@ -62,7 +62,7 @@
 
                     <!-- Next 3 Days Tasks -->
                     <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;" text="📅 Next 3 Days’ Tasks" />
-                    <ScrollPane fitToWidth="true" prefHeight="180" style="-fx-background-color: transparent;">
+                    <ScrollPane fitToWidth="true" prefHeight="231.0" prefWidth="617.0" style="-fx-background-color: transparent;">
                         <content>
                             <VBox fx:id="taskContainer" spacing="12" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
                             </VBox>

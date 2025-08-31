@@ -206,20 +206,7 @@ public class DashboardController {
         }
     }
 
-    @FXML
-    private void handleViewAllNotifications() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("NotificationView.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("All Notifications");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Failed to load Notifications page.", ButtonType.OK).show();
-        }
-    }
+
 
     // ================= Analytics Page =================================
     @FXML
@@ -257,8 +244,9 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseView.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
-            stage.setMaximized(true);
+
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

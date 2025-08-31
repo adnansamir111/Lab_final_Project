@@ -15,7 +15,7 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("Dashboard.fxml"));
         ///FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("CourseView.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("welcome");
+        stage.setTitle("Study_Buddy");
         stage.setScene(scene);
         //stage.centerOnScreen();g
         stage.setMaximized(true);

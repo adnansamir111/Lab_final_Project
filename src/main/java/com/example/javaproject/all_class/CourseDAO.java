@@ -43,7 +43,7 @@ public class CourseDAO {
                 String code     = rs.getString("code");
                 String title    = rs.getString("title");
                 String instr    = rs.getString("instructor");
-                int credits     = rs.getInt("credits");
+                double  credits     = rs.getDouble("credits");
 
                 // Use wrapper reads so null stays null (otherwise getDouble→0.0)
                 Double q1 = (rs.getObject("quiz1") != null) ? rs.getDouble("quiz1") : null;
@@ -79,7 +79,7 @@ public class CourseDAO {
             ps.setString(1, c.getCode());
             ps.setString(2, c.getTitle());
             ps.setString(3, c.getInstructor());
-            ps.setInt(4, c.getCredits());
+            ps.setDouble(4, c.getCredits());
             // allow nulls for marks if not set (use setObject)
             ps.setObject(5,  c.quiz1Property().get(), Types.REAL);
             ps.setObject(6,  c.quiz2Property().get(), Types.REAL);

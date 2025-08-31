@@ -7,7 +7,7 @@ public class Course {
     private final StringProperty code = new SimpleStringProperty();
     private final StringProperty title = new SimpleStringProperty();
     private final StringProperty instructor = new SimpleStringProperty();
-    private final IntegerProperty credits = new SimpleIntegerProperty();
+    private final DoubleProperty credits = new SimpleDoubleProperty();
 
     // NEW: marks for this course (nullable; use Double to allow nulls if needed)
     private final DoubleProperty quiz1 = new SimpleDoubleProperty();
@@ -18,13 +18,13 @@ public class Course {
     private final DoubleProperty fin   = new SimpleDoubleProperty(); // "final" in DB
 
     // Existing constructor (kept for compatibility)
-    public Course(int id, String code, String title, String instructor, int credits) {
+    public Course(int id, String code, String title, String instructor, double credits) {
         this.id.set(id);
         this.code.set(code);
         this.title.set(title);
         this.instructor.set(instructor);
         this.credits.set(credits);
-        // marks default to 0.0 (can be updated later)
+
     }
 
 
@@ -60,8 +60,8 @@ public class Course {
     public String getInstructor() { return instructor.get(); }
     public StringProperty instructorProperty() { return instructor; }
 
-    public int getCredits() { return credits.get(); }
-    public IntegerProperty creditsProperty() { return credits; }
+    public double getCredits() { return credits.get(); }
+    public DoubleProperty creditsProperty() { return credits; }
 
     public double getQuiz1() { return quiz1.get(); }
     public DoubleProperty quiz1Property() { return quiz1; }

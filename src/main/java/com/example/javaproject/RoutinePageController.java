@@ -13,6 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -76,11 +77,8 @@ public class RoutinePageController {
         }
     }
 
-    /**
-     * Build a routine “card” and add it to the day’s HBox.
-     * Minimal UI change: wrap the VBox in a StackPane and overlay a tiny delete button
-     * that appears on hover. Clicking it confirms & deletes just that entry.
-     */
+    // Clicking it confirms & deletes just that entry.
+    @FXML
     private void addRoutineToDay(HBox dayHBox, Routine routine) {
         // Base content (existing card style)
         VBox content = new VBox(4);
@@ -117,6 +115,17 @@ public class RoutinePageController {
         card.setOnMouseEntered(e -> deleteBtn.setVisible(true));
         card.setOnMouseExited(e -> deleteBtn.setVisible(false));
 
+        // Add alternating background colors for aesthetic
+        int index = dayHBox.getChildren().size();
+        String color = (index % 2 == 0) ? "#F1F1F1" : "#EDEDED"; // Alternating colors
+        content.setStyle("-fx-background-color: " + color + "; -fx-border-color: #E0E0E0; -fx-border-radius: 6; -fx-background-radius: 6;");
+
+        // Set a fixed width for each card
+        card.setPrefWidth(200);  // Set your desired fixed width here, e.g., 200px
+
+        // Adjust the margin for each event card to ensure uniform spacing
+        HBox.setMargin(card, new Insets(5));  // Add consistent margin around each card
+
         // Delete handler (confirm → delete one matching row → refresh)
         deleteBtn.setOnAction(e -> {
             e.consume();
@@ -142,6 +151,8 @@ public class RoutinePageController {
 
         dayHBox.getChildren().add(card);
     }
+
+
 
     // Navigate to Add Routine page
     @FXML

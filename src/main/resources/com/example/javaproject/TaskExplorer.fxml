@@ -21,14 +21,14 @@
         <HBox prefHeight="76.0" prefWidth="922.0" spacing="10" style="-fx-padding: 10; -fx-background-color: #2F4F4F;"> <!-- DatePicker initially disabled -->
 
             <!-- Course Dropdown -->
-            <Label prefHeight="17.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-font-weight: bold;" text="Course:" HBox.hgrow="ALWAYS">
+            <Label prefHeight="27.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: white;" text="Course:" HBox.hgrow="ALWAYS">
                 <HBox.margin>
                     <Insets />
                 </HBox.margin></Label>
             <ComboBox fx:id="courseComboBox" prefHeight="25.0" prefWidth="123.0" HBox.hgrow="ALWAYS" />
 
             <!-- Quick Filter ComboBox (This Week, Next Week, Custom Range) -->
-            <Label prefHeight="17.0" prefWidth="67.0" style="-fx-text-fill: white; -fx-font-weight: bold;" text="Select " HBox.hgrow="ALWAYS" />
+            <Label prefHeight="25.0" prefWidth="67.0" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: white;" text="Select " HBox.hgrow="ALWAYS" />
             <ComboBox fx:id="dateRangeComboBox" prefHeight="25.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
@@ -75,8 +75,12 @@
             </TableView>
         </ScrollPane>
     </center>
-    <bottom>
-        <Button mnemonicParsing="false" onAction="#handleback" style="-fx-background-color: #2F4F4F; -fx-font-weight: bold; -fx-text-fill: white;" text="Back" BorderPane.alignment="CENTER" />
-    </bottom>
+   <bottom>
+      <HBox prefHeight="37.0" prefWidth="900.0" style="-fx-background-color: #2F4F4F;" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#handleback" style="-fx-font-weight: bold;" styleClass="greenButton" text="Back" />
+         </children>
+      </HBox>
+   </bottom>
 
 </BorderPane>

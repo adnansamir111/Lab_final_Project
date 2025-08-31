@@ -245,8 +245,9 @@ public class DashboardController {
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
 
-            stage.setScene(new Scene(root));
-            stage.setMaximized(true);
+            stage.setScene(new Scene(root,stage.getWidth(),stage.getHeight()));
+
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

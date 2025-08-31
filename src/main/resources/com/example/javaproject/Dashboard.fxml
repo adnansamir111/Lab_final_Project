@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="900.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
+<BorderPane prefHeight="741.0" prefWidth="900.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
 
     <!-- Sidebar (Left side) -->
     <left>
@@ -73,7 +73,7 @@
                     <HBox alignment="CENTER_LEFT" spacing="20">
                         <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="🔔 Notifications" />
                     </HBox>
-                    <ScrollPane fitToWidth="true" prefHeight="150" style="-fx-background-color: transparent;">
+                    <ScrollPane fitToWidth="true" prefHeight="259.0" prefWidth="604.0" style="-fx-background-color: transparent;">
                         <content>
                             <VBox fx:id="notificationContainer" spacing="12" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
                             </VBox>

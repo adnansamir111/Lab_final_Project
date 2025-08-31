@@ -2,89 +2,47 @@ package com.example.javaproject;
 
 import java.sql.*;
 
-public final class DB {
+public class DB {
+    private static final String DB_URL = "jdbc:sqlite:database/student_assistant.db";
 
-    private DB() {}
-
-    public static Connection getConnection() {
-        try {
-            String url = "jdbc:sqlite:./database/student_assistant.db";
-            Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection(url);
-            //ENABLE FOREIGN KEY
-            try (Statement st = conn.createStatement()) {
-                st.executeUpdate("PRAGMA foreign_keys = ON;");
-            }
-
-            createSchema(conn); // Pass connection to schema creation method
-            return conn;
-        } catch (Exception e) {
-            throw new RuntimeException("Database connection failed", e);
-        }
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL);
     }
 
-    private static void createSchema(Connection conn) throws SQLException {
-        try (Statement st = conn.createStatement()) {
+    /**
+     * Ensure the course table has all expected columns (adds classroom_url if missing).
+     */
+    public static void ensureSchema() {
+        try (Connection conn = getConnection();
+             Statement st = conn.createStatement()) {
 
-            // Course Table
-            st.executeUpdate("""
-                CREATE TABLE IF NOT EXISTS course (
-                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  code TEXT NOT NULL,
-                  title TEXT NOT NULL,
-                  instructor TEXT,
-                  credits REAL 
-                );
-            """);
+            // Create table if it doesn't exist
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS course (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "code TEXT," +
+                    "title TEXT," +
+                    "instructor TEXT," +
+                    "credits REAL" +
+                    ")");
 
+            // Check if classroom_url column exists
+            boolean hasColumn = false;
+            try (ResultSet rs = st.executeQuery("PRAGMA table_info(course)")) {
+                while (rs.next()) {
+                    if ("classroom_url".equalsIgnoreCase(rs.getString("name"))) {
+                        hasColumn = true;
+                        break;
+                    }
+                }
+            }
 
-                        // Tasks Table with Cascading Delete + notification fields
-            st.executeUpdate("""
-                CREATE TABLE IF NOT EXISTS task (
-                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  course_id INTEGER,
-                  title TEXT NOT NULL,
-                  notes TEXT,
-                  due_at TEXT, -- yyyy-MM-dd
-                  status TEXT DEFAULT 'todo', -- todo, in-progress, done
-                  seen_3days INTEGER DEFAULT 0, -- reminder shown 3 days before
-                  seen_dayof INTEGER DEFAULT 0, -- reminder shown on due date
-                  completed_at TEXT, -- yyyy-MM-dd
-                  created_at TEXT DEFAULT (datetime('now', 'localtime')),
-                  updated_at TEXT DEFAULT (datetime('now', 'localtime')),
-                  FOREIGN KEY(course_id) REFERENCES course(id) ON DELETE CASCADE
-                );
-            """);
+            // If not, add it
+            if (!hasColumn) {
+                st.executeUpdate("ALTER TABLE course ADD COLUMN classroom_url TEXT");
+            }
 
-            // If task table already exists, try adding missing columns
-            try { st.executeUpdate("ALTER TABLE task ADD COLUMN seen_3days INTEGER DEFAULT 0"); } catch (SQLException ignored) {}
-            try { st.executeUpdate("ALTER TABLE task ADD COLUMN seen_dayof INTEGER DEFAULT 0"); } catch (SQLException ignored) {}
-            try { st.executeUpdate("ALTER TABLE task ADD COLUMN completed_at TEXT"); } catch (SQLException ignored) {}
-
-            // Study Session Table with Cascading Delete
-            st.executeUpdate("""
-                CREATE TABLE IF NOT EXISTS study_session (
-                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  course_id INTEGER,
-                  started_at TEXT DEFAULT (datetime('now', 'localtime')),
-                  ended_at TEXT,
-                  duration_min INTEGER,
-                  notes TEXT,
-                  FOREIGN KEY(course_id) REFERENCES course(id) ON DELETE CASCADE  -- Cascading delete
-                );
-            """);
-
-            // Routine Events Table (No Cascading for now)
-            st.executeUpdate("""
-                CREATE TABLE IF NOT EXISTS routine_events (
-                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  course_name TEXT NOT NULL,
-                  start_time TEXT NOT NULL,  -- Stored as TIME (HH:mm)
-                  end_time TEXT NOT NULL,    -- Stored as TIME (HH:mm)
-                  room TEXT,
-                  day_of_week TEXT NOT NULL -- e.g., MONDAY, TUESDAY, etc.
-                );
-            """);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

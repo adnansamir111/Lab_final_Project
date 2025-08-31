@@ -9,18 +9,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.GradeSheetController">
+<BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #F4F4F4;" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.GradeSheetController">
 
     <top>
-        <HBox spacing="12.0" style="-fx-padding: 16 20 12 20;" BorderPane.alignment="CENTER_LEFT">
+        <HBox spacing="12.0" style="-fx-padding: 16 20 12 20; -fx-background-color: #2F4F4F;" BorderPane.alignment="CENTER_LEFT">
             <children>
-                <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #263238;" text="Grade Sheet" />
+                <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;" text="Grade Sheet" />
             </children>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="10.0" BorderPane.alignment="CENTER">
+        <VBox spacing="10.0" style="-fx-background-color: #2F4F4F;" BorderPane.alignment="CENTER">
             <children>
                 <TableView fx:id="tableGrade" editable="true" prefHeight="560.0" prefWidth="860.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #E0E0E0; -fx-border-radius: 8;">
                     <columns>
@@ -44,10 +44,9 @@
     </center>
 
     <bottom>
-        <HBox spacing="10.0" style="-fx-padding: 12 20 16 20;" BorderPane.alignment="CENTER_RIGHT">
+        <HBox prefHeight="39.0" prefWidth="900.0" spacing="10.0" style="-fx-padding: 12 20 16 20; -fx-background-color: #2F4F4F;" BorderPane.alignment="CENTER_RIGHT">
             <children>
-                <Button fx:id="btnSave" mnemonicParsing="false" onAction="#onSave" style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 8;" text="Save Grades" />
-                <Button fx:id="btnBack" mnemonicParsing="false" onAction="#onBack" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 8;" text="Back" />
+                <Button fx:id="btnBack" mnemonicParsing="false" onAction="#onBack" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 8;" styleClass="greenButton" text="Back" />
             </children>
         </HBox>
     </bottom>

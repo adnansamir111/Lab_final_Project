@@ -3,63 +3,105 @@ package com.example.javaproject.all_class;
 import com.example.javaproject.DB;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CourseDAO {
 
-    // --- One-time, minimal migration: add mark columns if they don't exist ---
-    // Called at the start of listAll()/insert()/updateMarks() to keep it transparent.
+    // --- Existing migration for marks (kept) ---
     private static void ensureMarkColumns() {
         final String[] alters = new String[] {
                 "ALTER TABLE course ADD COLUMN quiz1 REAL",
                 "ALTER TABLE course ADD COLUMN quiz2 REAL",
                 "ALTER TABLE course ADD COLUMN quiz3 REAL",
                 "ALTER TABLE course ADD COLUMN quiz4 REAL",
-                "ALTER TABLE course ADD COLUMN mid   REAL",
-                // "final" is a keyword in Java, but OK in SQLite; quote it in UPDATE statements just in case.
+                "ALTER TABLE course ADD COLUMN mid REAL",
                 "ALTER TABLE course ADD COLUMN \"final\" REAL"
         };
         try (Connection conn = DB.getConnection();
              Statement st = conn.createStatement()) {
+
+            // ensure base table (defensive)
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS course (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "code TEXT, title TEXT, instructor TEXT, credits REAL" +
+                    ")");
+
+            // add columns if missing (safe ALTER)
             for (String sql : alters) {
-                try { st.executeUpdate(sql); } catch (SQLException ignored) { /* column already exists */ }
+                try {
+                    st.executeUpdate(sql);
+                } catch (SQLException ignored) { /* already exists */ }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    // --- NEW: migration for classroom_url (kept minimal and safe) ---
+    private static void ensureClassroomColumn() {
+        try (Connection conn = DB.getConnection();
+             Statement st = conn.createStatement()) {
+            // ensure table exists
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS course (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "code TEXT, title TEXT, instructor TEXT, credits REAL" +
+                    ")");
+
+            boolean hasColumn = false;
+            try (ResultSet rs = st.executeQuery("PRAGMA table_info(course)")) {
+                while (rs.next()) {
+                    if ("classroom_url".equalsIgnoreCase(rs.getString("name"))) {
+                        hasColumn = true;
+                        break;
+                    }
+                }
+            }
+            if (!hasColumn) {
+                st.executeUpdate("ALTER TABLE course ADD COLUMN classroom_url TEXT");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ---------- CRUD / Queries ----------
+
     public static List<Course> listAll() {
         ensureMarkColumns();
+        ensureClassroomColumn();
+
         List<Course> courses = new ArrayList<>();
-        String sql = "SELECT id, code, title, instructor, credits, " +
-                "quiz1, quiz2, quiz3, quiz4, mid, \"final\" AS fin " +
-                "FROM course ORDER BY code";
+        String sql =
+                "SELECT id, code, title, instructor, credits, " +
+                        "       quiz1, quiz2, quiz3, quiz4, mid, \"final\" AS fin, " +
+                        "       classroom_url " +
+                        "FROM course " +
+                        "ORDER BY code";
+
         try (Connection conn = DB.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()) {
-                int id          = rs.getInt("id");
-                String code     = rs.getString("code");
-                String title    = rs.getString("title");
-                String instr    = rs.getString("instructor");
-                double  credits     = rs.getDouble("credits");
 
-                // Use wrapper reads so null stays null (otherwise getDouble→0.0)
-                Double q1 = (rs.getObject("quiz1") != null) ? rs.getDouble("quiz1") : null;
-                Double q2 = (rs.getObject("quiz2") != null) ? rs.getDouble("quiz2") : null;
-                Double q3 = (rs.getObject("quiz3") != null) ? rs.getDouble("quiz3") : null;
-                Double q4 = (rs.getObject("quiz4") != null) ? rs.getDouble("quiz4") : null;
-                Double mid= (rs.getObject("mid")   != null) ? rs.getDouble("mid")   : null;
-                Double fin= (rs.getObject("fin")   != null) ? rs.getDouble("fin")   : null;
+            while (rs.next()) {
+                int id           = rs.getInt("id");
+                String code      = rs.getString("code");
+                String title     = rs.getString("title");
+                String instr     = rs.getString("instructor");
+                double credits   = rs.getDouble("credits");
 
                 Course c = new Course(id, code, title, instr, credits);
-                if (q1 != null) c.setQuiz1(q1);
-                if (q2 != null) c.setQuiz2(q2);
-                if (q3 != null) c.setQuiz3(q3);
-                if (q4 != null) c.setQuiz4(q4);
-                if (mid!= null) c.setMid(mid);
-                if (fin!= null) c.setFin(fin);
+
+                // marks (defensive null → 0.0)
+                c.setQuiz1(safeGetDouble(rs, "quiz1"));
+                c.setQuiz2(safeGetDouble(rs, "quiz2"));
+                c.setQuiz3(safeGetDouble(rs, "quiz3"));
+                c.setQuiz4(safeGetDouble(rs, "quiz4"));
+                c.setMid(safeGetDouble(rs, "mid"));
+                c.setFin(safeGetDouble(rs, "fin"));
+
+                // classroom link
+                c.setClassroomUrl(rs.getString("classroom_url"));
 
                 courses.add(c);
             }
@@ -71,45 +113,72 @@ public class CourseDAO {
 
     public static void insert(Course c) {
         ensureMarkColumns();
-        // Keep original minimal insert; marks are optional (NULL by default)
-        String sql = "INSERT INTO course (code, title, instructor, credits, quiz1, quiz2, quiz3, quiz4, mid, \"final\") " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        ensureClassroomColumn();
+
+        String sql =
+                "INSERT INTO course (code, title, instructor, credits, " +
+                        "                    quiz1, quiz2, quiz3, quiz4, mid, \"final\", classroom_url) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = DB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, c.getCode());
             ps.setString(2, c.getTitle());
             ps.setString(3, c.getInstructor());
             ps.setDouble(4, c.getCredits());
-            // allow nulls for marks if not set (use setObject)
-            ps.setObject(5,  c.quiz1Property().get(), Types.REAL);
-            ps.setObject(6,  c.quiz2Property().get(), Types.REAL);
-            ps.setObject(7,  c.quiz3Property().get(), Types.REAL);
-            ps.setObject(8,  c.quiz4Property().get(), Types.REAL);
-            ps.setObject(9,  c.midProperty().get(),   Types.REAL);
-            ps.setObject(10, c.finProperty().get(),   Types.REAL);
+
+            ps.setObject(5,  nullToDouble(c.getQuiz1()));
+            ps.setObject(6,  nullToDouble(c.getQuiz2()));
+            ps.setObject(7,  nullToDouble(c.getQuiz3()));
+            ps.setObject(8,  nullToDouble(c.getQuiz4()));
+            ps.setObject(9,  nullToDouble(c.getMid()));
+            ps.setObject(10, nullToDouble(c.getFin()));
+
+            String url = c.getClassroomUrl();
+            if (url == null || url.isBlank()) ps.setNull(11, Types.VARCHAR);
+            else ps.setString(11, url.trim());
+
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // Minimal helper to update marks later from Gradesheet (course row already exists)
-    public static void updateMarks(int courseId,
-                                   Double quiz1, Double quiz2, Double quiz3, Double quiz4,
-                                   Double mid, Double fin) {
+    /** Update only marks — kept to match your GradeSheetController usage. */
+    public static void updateMarks(int id, Double q1, Double q2, Double q3, Double q4, Double mid, Double fin) {
         ensureMarkColumns();
-        String sql = "UPDATE course SET " +
-                "quiz1=?, quiz2=?, quiz3=?, quiz4=?, mid=?, \"final\"=? " +
-                "WHERE id=?";
+        String sql = "UPDATE course SET quiz1=?, quiz2=?, quiz3=?, quiz4=?, mid=?, \"final\"=? WHERE id=?";
         try (Connection conn = DB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            if (quiz1 == null) ps.setNull(1, Types.REAL); else ps.setDouble(1, quiz1);
-            if (quiz2 == null) ps.setNull(2, Types.REAL); else ps.setDouble(2, quiz2);
-            if (quiz3 == null) ps.setNull(3, Types.REAL); else ps.setDouble(3, quiz3);
-            if (quiz4 == null) ps.setNull(4, Types.REAL); else ps.setDouble(4, quiz4);
-            if (mid   == null) ps.setNull(5, Types.REAL); else ps.setDouble(5, mid);
-            if (fin   == null) ps.setNull(6, Types.REAL); else ps.setDouble(6, fin);
-            ps.setInt(7, courseId);
+
+            setNullableDouble(ps, 1, q1);
+            setNullableDouble(ps, 2, q2);
+            setNullableDouble(ps, 3, q3);
+            setNullableDouble(ps, 4, q4);
+            setNullableDouble(ps, 5, mid);
+            setNullableDouble(ps, 6, fin);
+            ps.setInt(7, id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** NEW: Update classroom link only. */
+    public static void updateClassroomUrl(int id, String url) {
+        ensureClassroomColumn();
+        String sql = "UPDATE course SET classroom_url = ? WHERE id = ?";
+        try (Connection conn = DB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (url == null || url.isBlank()) {
+                ps.setNull(1, Types.VARCHAR);
+            } else {
+                ps.setString(1, url.trim());
+            }
+            ps.setInt(2, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,8 +186,7 @@ public class CourseDAO {
     }
 
     public static void delete(int id) {
-        ensureMarkColumns(); // harmless
-        String sql = "DELETE FROM course WHERE id=?";
+        String sql = "DELETE FROM course WHERE id = ?";
         try (Connection conn = DB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -128,57 +196,68 @@ public class CourseDAO {
         }
     }
 
-    public static int getCourseIdByCode(String courseCode) {
-        String sql = "SELECT id FROM course WHERE code = ?";  // SQL query to get the course_id by course_code
-        try (Connection conn = DB.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, courseCode);  // Set the course_code parameter in the SQL query
-            ResultSet rs = ps.executeQuery();  // Execute the query
+    // -------- Helper lookups (used in TaskExplorer, etc.) --------
 
-            if (rs.next()) {
-                return rs.getInt("id");  // Return the course_id (primary key)
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;  // Return -1 if no matching course found
-    }
-  /// getting all courses name in the task explorer
     public static List<String> getAllCourseNames() {
-        List<String> courseNames = new ArrayList<>();
-        String sql = "SELECT code FROM course ORDER BY code";  // Fetch all course codes
-
+        List<String> names = new ArrayList<>();
+        String sql = "SELECT code FROM course ORDER BY code";
         try (Connection conn = DB.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                courseNames.add(rs.getString("code"));  // Add course code to list
+                names.add(rs.getString("code"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return courseNames;
+        return names;
     }
 
-    /// fetching course_name(code) by using the course id(primary key)
-    public static String getCourseNameById(int courseId) {
-        String courseName = "";
-        String sql = "SELECT title FROM course WHERE id = ?";  // Fetch the course title using course_id
+    public static int getCourseIdByCode(String code) {
+        String sql = "SELECT id FROM course WHERE code = ?";
         try (Connection conn = DB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, courseId);  // Set the course_id parameter in the SQL query
-            ResultSet rs = ps.executeQuery();  // Execute the query
-
-            if (rs.next()) {
-                courseName = rs.getString("title");  // Get the course title (name)
+            ps.setString(1, code);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt("id");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return courseName;  // Return the course title (name)
+        return -1;
     }
 
+    public static String getCourseNameById(int courseId) {
+        String name = "";
+        String sql = "SELECT title FROM course WHERE id = ?";
+        try (Connection conn = DB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, courseId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) name = rs.getString("title");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
 
+    // -------- Small utils --------
 
+    private static double safeGetDouble(ResultSet rs, String col) throws SQLException {
+        double v = rs.getDouble(col);
+        if (rs.wasNull()) return 0.0;
+        return v;
+    }
 
+    private static void setNullableDouble(PreparedStatement ps, int index, Double value) throws SQLException {
+        if (value == null) ps.setNull(index, Types.REAL);
+        else ps.setDouble(index, value);
+    }
+
+    private static Double nullToDouble(double v) {
+        // In your model, marks are primitive doubles (default 0).
+        // Keep existing behavior: store 0.0 by default.
+        return v;
+    }
 }

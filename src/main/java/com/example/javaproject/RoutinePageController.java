@@ -3,20 +3,23 @@ package com.example.javaproject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class RoutinePageController {
 
@@ -28,51 +31,26 @@ public class RoutinePageController {
     @FXML private HBox saturdayHBox;
     @FXML private HBox sundayHBox;
 
-    @FXML private Button addRoutineButton;
+    @FXML private Button addRoutineButton; // used to get the Stage for navigation
 
-    // Initialize the page with the routines for each day
     @FXML
     public void initialize() {
         displayWeeklyRoutine();
     }
 
-    // Fetch and display routine for the entire week
+    /** Load and render all routines grouped by day. */
     public void displayWeeklyRoutine() {
-        // Clear all HBoxes first
         clearAllHBoxes();
 
-        // Fetch all routines for the week
         List<Routine> weeklyRoutines = RoutineDAO.getRoutineForWeek();
-
-        // Add the routines for each day to the corresponding HBox
         for (Routine routine : weeklyRoutines) {
-            switch (routine.getDayOfWeek().toUpperCase()) {
-                case "MONDAY":
-                    addRoutineToDay(mondayHBox, routine);
-                    break;
-                case "TUESDAY":
-                    addRoutineToDay(tuesdayHBox, routine);
-                    break;
-                case "WEDNESDAY":
-                    addRoutineToDay(wednesdayHBox, routine);
-                    break;
-                case "THURSDAY":
-                    addRoutineToDay(thursdayHBox, routine);
-                    break;
-                case "FRIDAY":
-                    addRoutineToDay(fridayHBox, routine);
-                    break;
-                case "SATURDAY":
-                    addRoutineToDay(saturdayHBox, routine);
-                    break;
-                case "SUNDAY":
-                    addRoutineToDay(sundayHBox, routine);
-                    break;
+            HBox dayHBox = getDayHBox(routine.getDayOfWeek());
+            if (dayHBox != null) {
+                addRoutineToDay(dayHBox, routine);
             }
         }
     }
 
-    // Clear all HBox containers
     private void clearAllHBoxes() {
         mondayHBox.getChildren().clear();
         tuesdayHBox.getChildren().clear();
@@ -83,42 +61,95 @@ public class RoutinePageController {
         sundayHBox.getChildren().clear();
     }
 
-    // Add a routine to a specific day's HBox (side by side)
+    private HBox getDayHBox(String day) {
+        if (day == null) return null;
+        String d = day.trim().toLowerCase();
+        switch (d) {
+            case "monday":    return mondayHBox;
+            case "tuesday":   return tuesdayHBox;
+            case "wednesday": return wednesdayHBox;
+            case "thursday":  return thursdayHBox;
+            case "friday":    return fridayHBox;
+            case "saturday":  return saturdayHBox;
+            case "sunday":    return sundayHBox;
+            default:          return null;
+        }
+    }
+
+    /**
+     * Build a routine “card” and add it to the day’s HBox.
+     * Minimal UI change: wrap the VBox in a StackPane and overlay a tiny delete button
+     * that appears on hover. Clicking it confirms & deletes just that entry.
+     */
     private void addRoutineToDay(HBox dayHBox, Routine routine) {
-        // Create a VBox for the routine to display course name above time
-        VBox routineVBox = new VBox();
-        routineVBox.setSpacing(5);
-        routineVBox.setPadding(new Insets(10));
-        routineVBox.setAlignment(Pos.CENTER);
-        routineVBox.setStyle("-fx-background-color: #E3F2FD; -fx-border-color: #BBDEFB; " +
-                "-fx-border-radius: 5; -fx-background-radius: 5; " +
-                "-fx-min-width: 150px;");
+        // Base content (existing card style)
+        VBox content = new VBox(4);
+        content.setPadding(new Insets(8));
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setStyle("-fx-background-color: #FAFAFA; -fx-border-color: #E0E0E0; -fx-border-radius: 6; -fx-background-radius: 6;");
 
-        // Create label for course name
-        Label courseLabel = new Label(routine.getCourseName());
-        courseLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-        courseLabel.setWrapText(true);
+        Label courseLabel = new Label(safe(routine.getCourseName())
+                + ((routine.getRoom() != null && !routine.getRoom().isEmpty()) ? " (" + routine.getRoom() + ")" : ""));
+        courseLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-        // Create label for time
         Label timeLabel = new Label(routine.getStartTime() + " - " + routine.getEndTime());
         timeLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #555555;");
 
-        // Add labels to VBox
-        routineVBox.getChildren().addAll(courseLabel, timeLabel);
+        content.getChildren().addAll(courseLabel, timeLabel);
 
-        // Add the VBox to the HBox for that day (side by side)
-        dayHBox.getChildren().add(routineVBox);
+        // Overlay delete button (hidden by default, shown on hover)
+        Button deleteBtn = new Button("×");
+        deleteBtn.setTooltip(new Tooltip("Delete"));
+        deleteBtn.setFocusTraversable(false);
+        deleteBtn.setVisible(false);
+        deleteBtn.setMinSize(24, 24);
+        deleteBtn.setPrefSize(24, 24);
+        deleteBtn.setStyle(
+                "-fx-background-color: #E53935; -fx-text-fill: white; " +
+                        "-fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 0;"
+        );
+
+        StackPane card = new StackPane(content, deleteBtn);
+        StackPane.setAlignment(deleteBtn, Pos.TOP_RIGHT);
+        StackPane.setMargin(deleteBtn, new Insets(4));
+
+        // Hover behaviour
+        card.setOnMouseEntered(e -> deleteBtn.setVisible(true));
+        card.setOnMouseExited(e -> deleteBtn.setVisible(false));
+
+        // Delete handler (confirm → delete one matching row → refresh)
+        deleteBtn.setOnAction(e -> {
+            e.consume();
+            String summary = (safe(routine.getDayOfWeek()) + "  " + routine.getStartTime() + "-" + routine.getEndTime()
+                    + "  " + safe(routine.getCourseName())
+                    + ((routine.getRoom() != null && !routine.getRoom().isEmpty()) ? " (" + routine.getRoom() + ")" : "")).trim();
+
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Delete this routine entry?\n\n" + summary,
+                    ButtonType.YES, ButtonType.NO);
+            confirm.setHeaderText("Confirm Delete");
+            Optional<ButtonType> res = confirm.showAndWait();
+            if (!res.isPresent() || res.get() != ButtonType.YES) return;
+
+            int rows = RoutineDAO.deleteOneMatching(routine); // deletes exactly one row
+            if (rows > 0) {
+                new Alert(Alert.AlertType.INFORMATION, "Deleted successfully.", ButtonType.OK).show();
+                refreshRoutineDisplay();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Delete failed.", ButtonType.OK).show();
+            }
+        });
+
+        dayHBox.getChildren().add(card);
     }
 
-    // Method to handle adding a new routine event
+    // Navigate to Add Routine page
     @FXML
     private void addRoutineEvent() {
         try {
-            // Navigate to AddRoutinePage.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("AddRoutinePage.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) addRoutineButton.getScene().getWindow();
-            ///stage.setResizable(false);
             stage.setScene(new Scene(root));
             stage.setMaximized(true);
             stage.show();
@@ -128,18 +159,18 @@ public class RoutinePageController {
         }
     }
 
-    // Method to refresh the routine display (can be called after adding a new routine)
+    /** Re-render after any changes. */
     public void refreshRoutineDisplay() {
         displayWeeklyRoutine();
     }
+
+    // Back to dashboard
     @FXML
     void backtodashboard(ActionEvent event) {
         try {
-            // Navigate to AddRoutinePage.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) addRoutineButton.getScene().getWindow();
-            ///stage.setResizable(false);
             stage.setScene(new Scene(root));
             stage.setMaximized(true);
             stage.show();
@@ -149,6 +180,5 @@ public class RoutinePageController {
         }
     }
 
-
-
+    private static String safe(String s) { return (s == null) ? "" : s; }
 }

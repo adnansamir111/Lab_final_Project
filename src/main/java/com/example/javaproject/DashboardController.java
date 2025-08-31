@@ -101,7 +101,7 @@ public class DashboardController {
             return;
         taskContainer.getChildren().clear();
 
-        List<Task> tasks = TaskDAO.getUpcomingTasks(3); // Fetch tasks for next 3 days
+        List<Task> tasks = TaskDAO.getUpcomingTasks(3);
         for (Task task : tasks) {
             HBox card = new HBox(30); // spacing between fields
             card.setStyle("-fx-background-radius: 8; -fx-padding: 10; "
@@ -134,7 +134,9 @@ public class DashboardController {
             // ✅ Title (bold)
             Label name = new Label(task.getTitle());
 
+
             name.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
 
             // ✅ Due Date + Day (bold)
             String dueLabelText = "Due: " + task.getDueAt();
@@ -164,7 +166,7 @@ public class DashboardController {
             return;
         notificationContainer.getChildren().clear();
 
-        List<Task> dueTasks = TaskDAO.getDueReminders(); // Fetch due/past-due tasks
+        List<Task> dueTasks = TaskDAO.getDueReminders();
         for (Task task : dueTasks) {
             String today = LocalDate.now().toString();
             String threeDaysLater = LocalDate.now().plusDays(3).toString();
@@ -182,7 +184,6 @@ public class DashboardController {
                 notifText = "🔔 Task Reminder: " + task.getTitle();
             }
 
-            // highlight unseen
             boolean unseen = (isThreeDays && task.getSeen3Days() == 0) ||
                     (!isThreeDays && task.getSeenDayOf() == 0);
 
@@ -196,8 +197,8 @@ public class DashboardController {
             Button dismissBtn = new Button("Dismiss");
             boolean finalIsThreeDays = isThreeDays;
             dismissBtn.setOnAction(e -> {
-                TaskDAO.markAsSeen(task.getId(), finalIsThreeDays); // ✅ fixed for dual seen flags
-                loadNotifications(); // refresh after dismiss
+                TaskDAO.markAsSeen(task.getId(), finalIsThreeDays);
+                loadNotifications();
             });
 
             notifBox.getChildren().addAll(msg, dismissBtn);
@@ -247,7 +248,6 @@ public class DashboardController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Failed to load Routine page.", ButtonType.OK).show();
         }
     }
 
@@ -262,7 +262,6 @@ public class DashboardController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Failed to load Course page.", ButtonType.OK).show();
         }
     }
 
@@ -276,7 +275,20 @@ public class DashboardController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Failed to load Sessions page.", ButtonType.OK).show();
+        }
+    }
+
+    // ✅ New GradeSheet navigation
+    @FXML
+    private void goToGradeSheetPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("GradeSheet.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) routineContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

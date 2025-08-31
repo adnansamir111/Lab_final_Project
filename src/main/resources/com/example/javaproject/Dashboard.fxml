@@ -40,6 +40,11 @@
             </Button>
 
 
+            <!-- ✅ New GradeSheet button -->
+            <Button onAction="#goToGradeSheetPage" prefHeight="40.0" prefWidth="160.0"
+                    style="-fx-font-size: 14px; -fx-background-color: #3b3b3b; -fx-text-fill: white; -fx-padding: 10;"
+                    text="Go to GradeSheet"/>
+
         </VBox>
     </left>
 

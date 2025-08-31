@@ -1,19 +1,19 @@
 package com.example.javaproject;
 
 import com.example.javaproject.all_class.*;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class CourseDetailController {
@@ -75,41 +75,6 @@ public class CourseDetailController {
             colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
             colNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
 
-            // ✅ Wrap text in Title column
-            colTitle.setCellFactory(tc -> {
-                TableCell<Task, String> cell = new TableCell<>() {
-                    private final Text text = new Text();
-                    {
-                        text.wrappingWidthProperty().bind(tc.widthProperty());
-                        setGraphic(text);
-                    }
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        text.setText(empty || item == null ? "" : item);
-                    }
-                };
-                return cell;
-            });
-
-            // ✅ Wrap text in Notes column
-            colNotes.setCellFactory(tc -> {
-                TableCell<Task, String> cell = new TableCell<>() {
-                    private final Text text = new Text();
-                    {
-                        text.wrappingWidthProperty().bind(tc.widthProperty());
-                        setGraphic(text);
-                    }
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        text.setText(empty || item == null ? "" : item);
-                    }
-                };
-                return cell;
-            });
-
-            // ✅ Row styling
             taskTable.setRowFactory(tv -> new TableRow<>() {
                 @Override
                 protected void updateItem(Task item, boolean empty) {
@@ -368,4 +333,207 @@ public class CourseDetailController {
             }
         });
     }
+
+    // Manually Add Study Session
+
+
+//    @FXML
+//    private void onAddManualRecord() {
+//        Dialog<StudySession> dialog = new Dialog<>();
+//        dialog.setTitle("Add Study Session");
+//
+//        ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+//        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+//
+//        // Create DatePicker for date selection
+//        DatePicker datePicker = new DatePicker();
+//        TextField startTimeField = new TextField();
+//        TextField endTimeField = new TextField();
+//        TextArea notesArea = new TextArea();
+//
+//        // Add listener to auto-calculate the duration once start or end time is entered
+//        startTimeField.setOnAction(e -> calculateDuration(startTimeField, endTimeField));
+//        endTimeField.setOnAction(e -> calculateDuration(startTimeField, endTimeField));
+//
+//        // Add format hint
+//        Label formatHint = new Label("Enter time in format: hh:mm AM/PM");
+//
+//        VBox vbox = new VBox(10, new Label("Select Date:"), datePicker,
+//                new Label("Start Time:"), startTimeField,
+//                new Label("End Time:"), endTimeField,
+//                formatHint,
+//                new Label("Notes:"), notesArea);
+//        vbox.setStyle("-fx-padding: 10;");
+//        dialog.getDialogPane().setContent(vbox);
+//
+//        dialog.setResultConverter(button -> {
+//            if (button == saveBtn) {
+//                // Ensure the date, start time, and end time are valid
+//                if (startTimeField.getText().isEmpty() || endTimeField.getText().isEmpty() || datePicker.getValue() == null) {
+//                    new Alert(Alert.AlertType.ERROR, "Date, Start Time, and End Time must be provided").show();
+//                    return null;
+//                }
+//
+//                // Calculate the duration before saving the session
+//                long duration = calculateDuration(startTimeField, endTimeField);
+//
+//                // Combine the selected date with the start and end times
+//                String startDateTime = datePicker.getValue().toString() + " " + startTimeField.getText();
+//                String endDateTime = datePicker.getValue().toString() + " " + endTimeField.getText();
+//
+//                // Return the manual study session with calculated duration
+//                return new StudySession(0, course.getId(),
+//                        startDateTime, endDateTime,
+//                        (int) duration,  // Get the calculated duration
+//                        notesArea.getText());
+//            }
+//            return null;
+//        });
+//
+//        dialog.showAndWait().ifPresent(session -> {
+//            StudySessionDAO.insert(session); // Insert into the database
+//            loadSessions();  // Reload the sessions table
+//        });
+//    }
+//    private long calculateDuration(TextField startTimeField, TextField endTimeField) {
+//        try {
+//            String start = startTimeField.getText();
+//            String end = endTimeField.getText();
+//
+//            // Use DateTimeFormatter to support AM/PM format (hh:mm a)
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+//
+//            // Parse the start and end times into LocalTime objects (AM/PM supported)
+//            LocalTime startTime = LocalTime.parse(start, formatter);
+//            LocalTime endTime = LocalTime.parse(end, formatter);
+//
+//            // Calculate the duration in minutes
+//            long duration = Duration.between(startTime, endTime).toMinutes();
+//
+//            // Check if the end time is earlier than the start time
+//            if (duration <= 0) {
+//                new Alert(Alert.AlertType.ERROR, "End time must be later than start time!").show();
+//                return 0;  // Return 0 to prevent invalid data
+//            }
+//
+//            // Return the calculated duration
+//            return duration;
+//
+//        } catch (Exception e) {
+//            // Handle errors gracefully (invalid date/time format)
+//            new Alert(Alert.AlertType.ERROR, "Invalid date/time format. Please use hh:mm AM/PM").show();
+//            return 0;  // Return 0 if there's an error
+//        }
+//    }
+//
+
+    @FXML
+    private void onAddManualRecord() {
+        Dialog<StudySession> dialog = new Dialog<>();
+        dialog.setTitle("Add Study Session");
+
+        ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+        // Create DatePicker for date selection
+        DatePicker datePicker = new DatePicker();
+        TextField startTimeField = new TextField();
+        TextField endTimeField = new TextField();
+        TextArea notesArea = new TextArea();
+
+        // Add format hint
+        Label formatHint = new Label("Enter time in format: hh:mm AM/PM");
+
+        VBox vbox = new VBox(10, new Label("Select Date:"), datePicker,
+                new Label("Start Time:"), startTimeField,
+                new Label("End Time:"), endTimeField,
+                formatHint,
+                new Label("Notes:"), notesArea);
+        vbox.setStyle("-fx-padding: 10;");
+        dialog.getDialogPane().setContent(vbox);
+
+        // Enable/disable save button based on valid input
+        Node saveButton = dialog.getDialogPane().lookupButton(saveBtn);
+        saveButton.setDisable(true); // Disable initially
+
+        // Validation listener
+        ChangeListener<String> validationListener = (obs, oldV, newV) -> {
+            boolean isValid = !datePicker.getValue().toString().isEmpty() &&
+                    !startTimeField.getText().trim().isEmpty() &&
+                    !endTimeField.getText().trim().isEmpty();
+            saveButton.setDisable(!isValid);
+        };
+
+        startTimeField.textProperty().addListener(validationListener);
+        endTimeField.textProperty().addListener(validationListener);
+        datePicker.valueProperty().addListener((obs, oldV, newV) -> {
+            boolean isValid = newV != null &&
+                    !startTimeField.getText().trim().isEmpty() &&
+                    !endTimeField.getText().trim().isEmpty();
+            saveButton.setDisable(!isValid);
+        });
+
+        dialog.setResultConverter(button -> {
+            if (button == saveBtn) {
+                // Ensure the date, start time, and end time are valid
+                if (datePicker.getValue() == null || startTimeField.getText().isEmpty() || endTimeField.getText().isEmpty()) {
+                    new Alert(Alert.AlertType.ERROR, "Date, Start Time, and End Time must be provided").show();
+                    return null;
+                }
+
+                long duration;
+                try {
+                    duration = calculateDuration(startTimeField.getText(), endTimeField.getText());
+                } catch (IllegalArgumentException e) {
+                    new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+                    return null; // Stop the process if there's an error
+                }
+
+                if (duration <= 0) {
+                    new Alert(Alert.AlertType.ERROR, "End time must be later than start time.").show();
+                    return null; // Stop the process if duration is invalid
+                }
+
+                // Combine the selected date with the start and end times
+                String startDateTime = datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + " " + startTimeField.getText();
+                String endDateTime = datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + " " + endTimeField.getText();
+
+                // Return the manual study session with calculated duration
+                return new StudySession(0, course.getId(),
+                        startDateTime, endDateTime,
+                        (int) duration,  // Get the calculated duration
+                        notesArea.getText());
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(session -> {
+            StudySessionDAO.insert(session); // Insert into the database
+            loadSessions();  // Reload the sessions table
+        });
+    }
+
+    private long calculateDuration(String start, String end) {
+        try {
+            // Use DateTimeFormatter to support AM/PM format (hh:mm a)
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+
+            // Parse the start and end times into LocalTime objects
+            LocalTime startTime = LocalTime.parse(start.trim(), formatter);
+            LocalTime endTime = LocalTime.parse(end.trim(), formatter);
+
+            // Calculate the duration in minutes
+            long duration = Duration.between(startTime, endTime).toMinutes();
+
+            return duration;
+
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid time format. Please use 'hh:mm AM/PM'.");
+        }
+    }
+
+
+
+
+
 }

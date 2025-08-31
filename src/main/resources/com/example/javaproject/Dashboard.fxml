@@ -31,14 +31,18 @@
                     <Font name="Arial Black" size="12.0" />
                 </font>
             </Button>
+
             <Button onAction="#goToAnalyticsPage" prefHeight="40.0" prefWidth="125.0" styleClass="dashboard-button" text="Analytics">
+
                 <font>
-                    <Font name="System Bold" size="12.0"/>
+                    <Font name="System Bold" size="12.0" />
                 </font>
             </Button>
 
+
             <!-- New GradeSheet button with hover effect -->
             <Button onAction="#goToGradeSheetPage" prefHeight="40.0" prefWidth="160.0" styleClass="dashboard-button" text="Go to GradeSheet"/>
+
         </VBox>
     </left>
 

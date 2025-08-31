@@ -120,7 +120,11 @@ public class CoursesController {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addBtnType) {
                 try {
-                    int credits = Integer.parseInt(creditsField.getText().trim());
+                    double credits = Double.parseDouble(creditsField.getText().trim());
+                    if (credits <= 0) {
+                        new Alert(Alert.AlertType.ERROR, "Credits must be a positive number").showAndWait();
+                        return null;
+                    }
                     return new Course(0,
                             codeField.getText().trim(),
                             titleField.getText().trim(),

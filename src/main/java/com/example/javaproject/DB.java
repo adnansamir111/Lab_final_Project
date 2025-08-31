@@ -33,7 +33,7 @@ public final class DB {
                   code TEXT NOT NULL,
                   title TEXT NOT NULL,
                   instructor TEXT,
-                  credits INTEGER DEFAULT 0
+                  credits REAL 
                 );
             """);
 

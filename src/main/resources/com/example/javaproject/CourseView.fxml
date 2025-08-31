@@ -13,9 +13,9 @@
 
     <!-- Top Toolbar -->
     <top>
-        <ToolBar>
+        <ToolBar style="-fx-background-color: #2F4F4F;">
             <Label prefHeight="47.0" prefWidth="173.0" style="-fx-font-size:18; -fx-font-weight:bold;" styleClass="blueButton" text="📚 Courses" wrapText="true" />
-            <Pane HBox.hgrow="ALWAYS" />
+            <Pane style="-fx-background-color: #2F4F4F;" HBox.hgrow="ALWAYS" />
             <Button onAction="#onAdd" styleClass="greenButton" text="➕ Add Course" />
         </ToolBar>
     </top>
@@ -29,7 +29,7 @@
         </ScrollPane>
     </center>
    <bottom>
-      <HBox prefHeight="14.0" prefWidth="627.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="14.0" prefWidth="627.0" style="-fx-background-color: #2F4F4F;" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#onBack" prefHeight="40.0" prefWidth="79.0" style="-fx-font-weight: bold;" styleClass="greenButton" text="Back" />
          </children>

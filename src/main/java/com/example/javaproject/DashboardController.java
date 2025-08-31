@@ -48,9 +48,9 @@ public class DashboardController {
         String todayName = LocalDate.now().getDayOfWeek()
                 .getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.ENGLISH);
 
-        // Update the header label dynamically (you should have fx:id for routine header
-        // in FXML)
-        routineHeader.setText(" " + todayName);
+
+        // Update the header label dynamically (you should have fx:id for routine header in FXML)
+        routineHeader.setText(" "+todayName);
         routineHeader.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;");
 
         // Clear previous routines
@@ -107,6 +107,7 @@ public class DashboardController {
             card.setStyle("-fx-background-radius: 8; -fx-padding: 10; "
                     + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);");
 
+
             // ✅ Background color by status
             String bgColor;
             if ("done".equalsIgnoreCase(task.getStatus())) {
@@ -133,7 +134,9 @@ public class DashboardController {
             // ✅ Title (bold)
             Label name = new Label(task.getTitle());
 
+
             name.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
 
             // ✅ Due Date + Day (bold)
             String dueLabelText = "Due: " + task.getDueAt();
@@ -142,8 +145,7 @@ public class DashboardController {
                 String dayName = dueDate.getDayOfWeek()
                         .getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.ENGLISH);
                 dueLabelText += " (" + dayName + ")";
-            } catch (Exception e) {
-                /* ignore */ }
+            } catch (Exception e) { /* ignore */ }
             Label due = new Label(dueLabelText);
             due.setStyle("-fx-font-weight: bold; -fx-font-size: 13px;");
 
@@ -156,6 +158,7 @@ public class DashboardController {
             taskContainer.getChildren().add(card);
         }
     }
+
 
     // ==================== Notifications ====================
     private void loadNotifications() {
@@ -203,20 +206,7 @@ public class DashboardController {
         }
     }
 
-    @FXML
-    private void handleViewAllNotifications() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("NotificationView.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("All Notifications");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Failed to load Notifications page.", ButtonType.OK).show();
-        }
-    }
+
 
     // ================= Analytics Page =================================
     @FXML
@@ -240,8 +230,6 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("RoutinePage.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
-            stage.setWidth(routineContainer.getScene().getWidth());
-            stage.setHeight(routineContainer.getScene().getHeight());
             stage.setScene(new Scene(root));
             stage.setMaximized(true);
             stage.show();
@@ -255,17 +243,10 @@ public class DashboardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseView.fxml"));
             Parent root = loader.load();
-
-            // Get the current stage (dashboard)
             Stage stage = (Stage) routineContainer.getScene().getWindow();
 
-            // Set the course page size to match the dashboard size
-            stage.setWidth(routineContainer.getScene().getWidth());
-            stage.setHeight(routineContainer.getScene().getHeight());
-
-            // Maximize the stage to ensure full screen
-            stage.setMaximized(true); // Prevent from being maximized if you want exact size
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -278,9 +259,6 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("TaskExplorer.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
-            stage.setWidth(routineContainer.getScene().getWidth());
-            stage.setHeight(routineContainer.getScene().getHeight());
-            stage.setMaximized(true);
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {

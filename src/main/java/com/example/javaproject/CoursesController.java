@@ -1,5 +1,6 @@
 package com.example.javaproject;
-
+import javafx.application.Application;
+import javafx.application.HostServices;
 import com.example.javaproject.all_class.Course;
 import com.example.javaproject.all_class.CourseDAO;
 import javafx.event.ActionEvent;
@@ -15,6 +16,12 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class CoursesController {
+
+    private HostServices hostServices;
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
 
     @FXML
     private TilePane courseContainer;
@@ -149,6 +156,9 @@ public class CoursesController {
             Parent root = loader.load();
 
             CourseDetailController controller = loader.getController();
+            ///changing
+            controller.setHostServices(this.hostServices);
+
             controller.setCourse(course);
 
             Stage stage = (Stage) courseContainer.getScene().getWindow();

@@ -37,8 +37,7 @@ public final class DB {
                 );
             """);
 
-
-                        // Tasks Table with Cascading Delete + notification fields
+            // Tasks Table with Cascading Delete + notification fields
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS task (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -83,6 +82,18 @@ public final class DB {
                   end_time TEXT NOT NULL,    -- Stored as TIME (HH:mm)
                   room TEXT,
                   day_of_week TEXT NOT NULL -- e.g., MONDAY, TUESDAY, etc.
+                );
+            """);
+
+            // ================== Add the Resources Table ===================
+            // Resource Table for storing resources (topic, video link) related to courses
+            st.executeUpdate("""
+                CREATE TABLE IF NOT EXISTS resources (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  course_id INTEGER NOT NULL,  -- Reference to course.id
+                  topic TEXT NOT NULL,
+                  video_link TEXT NOT NULL,
+                  FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE  -- Foreign key referencing course.id
                 );
             """);
         }

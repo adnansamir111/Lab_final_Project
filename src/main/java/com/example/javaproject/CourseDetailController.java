@@ -10,7 +10,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
+import javafx.application.HostServices;
 
+import javafx.application.HostServices;
+import java.net.URI;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -23,6 +26,12 @@ public class CourseDetailController {
     @FXML private Label lblCredits;
 
     private Course course;
+    private HostServices hostServices;  // Store the HostServices instance
+
+    // Setter method to inject HostServices
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
 
     // Called by CoursesController when navigating
     public void setCourse(Course course) {
@@ -33,6 +42,7 @@ public class CourseDetailController {
 
         loadTasks();
         loadSessions();
+        loadResources();
     }
 
     @FXML
@@ -66,6 +76,55 @@ public class CourseDetailController {
     @FXML private TableColumn<Task, String> colDue;
     @FXML private TableColumn<Task, String> colStatus;
     @FXML private TableColumn<Task, String> colNotes;
+    // resource table
+    @FXML private TableView<Resource> resourceTable;
+    @FXML private TableColumn<Resource, String> colTopic;
+    @FXML private TableColumn<Resource, String> colVideoLink;
+
+//    @FXML
+//    public void initialize() {
+//        if (taskTable != null) {
+//            colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+//            colDue.setCellValueFactory(new PropertyValueFactory<>("dueAt"));
+//            colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+//            colNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
+//
+//            taskTable.setRowFactory(tv -> new TableRow<>() {
+//                @Override
+//                protected void updateItem(Task item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    getStyleClass().removeAll("task-done", "task-pending", "task-missed");
+//
+//                    if (item != null && !empty) {
+//                        if ("done".equalsIgnoreCase(item.getStatus())) {
+//                            getStyleClass().add("task-done");
+//                        } else if ("todo".equalsIgnoreCase(item.getStatus()) ||
+//                                "in-progress".equalsIgnoreCase(item.getStatus())) {
+//                            if (item.getDueAt() != null && !item.getDueAt().isEmpty()
+//                                    && LocalDate.parse(item.getDueAt()).isBefore(LocalDate.now())) {
+//                                getStyleClass().add("task-missed"); // overdue
+//                            } else {
+//                                getStyleClass().add("task-pending"); // active
+//                            }
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//
+//        if (sessionTable != null) {
+//            colStart.setCellValueFactory(new PropertyValueFactory<>("startedAt"));
+//            colEnd.setCellValueFactory(new PropertyValueFactory<>("endedAt"));
+//            colDuration.setCellValueFactory(new PropertyValueFactory<>("durationMin"));
+//            colSessionNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
+//        }
+//
+//        if (resourceTable != null) {
+//            colTopic.setCellValueFactory(new PropertyValueFactory<>("topic"));
+//            colVideoLink.setCellValueFactory(new PropertyValueFactory<>("videoLink"));
+//            loadResources();  // Load resources for the current course
+//        }
+//    }
 
     @FXML
     public void initialize() {
@@ -104,12 +163,118 @@ public class CourseDetailController {
             colDuration.setCellValueFactory(new PropertyValueFactory<>("durationMin"));
             colSessionNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
         }
+
+        if (resourceTable != null) {
+            colTopic.setCellValueFactory(new PropertyValueFactory<>("topic"));
+
+            // ✅ This line was missing; without it the cell value is null so nothing shows.
+            colVideoLink.setCellValueFactory(new PropertyValueFactory<>("videoLink"));
+
+            // Render each cell as a clickable Hyperlink
+            colVideoLink.setCellFactory(column -> new TableCell<Resource, String>() {
+                private final Hyperlink hyperlink = new Hyperlink();
+                {
+                    hyperlink.setWrapText(true);
+                    hyperlink.setMaxWidth(Double.MAX_VALUE);
+                }
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null || item.isBlank()) {
+                        setGraphic(null);
+                    } else {
+                        hyperlink.setText(item);
+                        hyperlink.setOnAction(e -> openLink(item));
+                        setGraphic(hyperlink);
+                    }
+                }
+            });
+
+            loadResources();  // Load resources for the current course
+        }
     }
+
+
+
+    //    private void openLink(String url) {
+//        try {
+//            // Open the URL in the default web browser
+//            HostServices hostServices = getHostServices();
+//            hostServices.showDocument(url);
+//        } catch (Exception e) {
+//            new Alert(Alert.AlertType.ERROR, "Invalid URL").show();
+//        }
+//    }
+    private void openLink(String url) {
+        try {
+            String target = (url == null) ? "" : url.trim();
+            if (target.isEmpty()) {
+                new Alert(Alert.AlertType.ERROR, "Empty URL").show();
+                return;
+            }
+            // add https:// if user pasted without scheme
+            if (!target.matches("(?i)^https?://.*")) {
+                target = "https://" + target;
+            }
+
+            if (hostServices != null) {
+                hostServices.showDocument(target);  // default browser
+            } else if (java.awt.Desktop.isDesktopSupported()) {
+                java.awt.Desktop.getDesktop().browse(new java.net.URI(target));
+            } else {
+                new Alert(Alert.AlertType.ERROR, "No supported way to open links on this platform.").show();
+            }
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid URL").show();
+        }
+    }
+
 
     private void loadTasks() {
         List<Task> tasks = TaskDAO.listByCourse(course.getId());
         taskTable.setItems(FXCollections.observableArrayList(tasks));
     }
+
+    // Load resources for the current course
+    private void loadResources() {
+        if (course == null) return;  // Ensure the course is not null
+        List<Resource> resources = ResourceDAO.listByCourse(course.getId());  // Fetch resources using course code
+        resourceTable.setItems(FXCollections.observableArrayList(resources));  // Set the items in the table
+    }
+
+    @FXML
+    private void onAddResource() {
+        Dialog<Resource> dialog = new Dialog<>();
+        dialog.setTitle("Add Resource");
+
+        ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+        // Create input fields for topic and video link
+        TextField topicField = new TextField();
+        TextField linkField = new TextField();
+
+        VBox vbox = new VBox(10, new Label("Topic:"), topicField,
+                new Label("Video Link:"), linkField);
+        vbox.setStyle("-fx-padding: 10;");
+        dialog.getDialogPane().setContent(vbox);
+
+        dialog.setResultConverter(button -> {
+            if (button == saveBtn) {
+                // Create a new Resource object with the provided details
+                return new Resource(0, course.getId(), topicField.getText(), linkField.getText());
+            }
+            return null;
+        });
+
+        // Show the dialog and handle the result
+        dialog.showAndWait().ifPresent(resource -> {
+            ResourceDAO.insert(resource);  // Insert the new resource into the database
+            loadResources();  // Reload the resources table to display the new resource
+        });
+    }
+
+
 
     @FXML
     private void onAddTask() {
@@ -335,10 +500,6 @@ public class CourseDetailController {
     }
 
     // Manually Add Study Session
-
-
-
-
     @FXML
     private void onAddManualRecord() {
         Dialog<StudySession> dialog = new Dialog<>();
@@ -443,9 +604,4 @@ public class CourseDetailController {
             throw new IllegalArgumentException("Invalid time format. Please use 'hh:mm AM/PM'.");
         }
     }
-
-
-
-
-
 }

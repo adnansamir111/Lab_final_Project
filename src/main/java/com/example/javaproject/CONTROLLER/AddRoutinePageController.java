@@ -80,7 +80,7 @@ public class AddRoutinePageController {
 
     private void back() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("RoutinePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/RoutinePage.fxml"));
             Parent root = loader.load();
 
             // Get the current window and set the new scene

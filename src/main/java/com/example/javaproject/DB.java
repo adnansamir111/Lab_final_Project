@@ -85,7 +85,7 @@ public final class DB {
                 );
             """);
 
-            // ================== Add the Resources Table ===================
+
             // Resource Table for storing resources (topic, video link) related to courses
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS resources (
@@ -96,6 +96,18 @@ public final class DB {
                   FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE  -- Foreign key referencing course.id
                 );
             """);
+
+            // Chapter Table for storing chapters related to courses
+            st.executeUpdate("""
+            CREATE TABLE IF NOT EXISTS chapters (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              course_id INTEGER NOT NULL,  -- Reference to course.id
+              chapter_name TEXT NOT NULL,
+              is_completed BOOLEAN DEFAULT FALSE,  -- Mark if chapter is completed
+              FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE  -- Foreign key referencing course.id
+            );
+        """);
+
         }
     }
 }

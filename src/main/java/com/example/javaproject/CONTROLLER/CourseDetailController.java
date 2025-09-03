@@ -1,9 +1,6 @@
 package com.example.javaproject.CONTROLLER;
 
-import com.example.javaproject.DAO.CourseDAO;
-import com.example.javaproject.DAO.ResourceDAO;
-import com.example.javaproject.DAO.StudySessionDAO;
-import com.example.javaproject.DAO.TaskDAO;
+import com.example.javaproject.DAO.*;
 import com.example.javaproject.all_class.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -11,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.application.HostServices;
@@ -44,6 +42,7 @@ public class CourseDetailController {
         loadTasks();
         loadSessions();
         loadResources();
+        loadChapters();  // Added to load chapters
     }
 
     @FXML
@@ -82,7 +81,10 @@ public class CourseDetailController {
     @FXML private TableColumn<Resource, String> colTopic;
     @FXML private TableColumn<Resource, String> colVideoLink;
 
-
+    // chapter table
+    @FXML private TableView<Chapter> chapterTable;
+    @FXML private TableColumn<Chapter, String> colChapter;
+    @FXML private TableColumn<Chapter, String> colActions;
 
     @FXML
     public void initialize() {
@@ -150,9 +152,142 @@ public class CourseDetailController {
 
             loadResources();  // Load resources for the current course
         }
+        if (chapterTable != null) {
+            colChapter.setCellValueFactory(new PropertyValueFactory<>("chapterName"));
+
+            // Create a button in the Actions column for each chapter
+            colActions.setCellFactory(col -> new TableCell<Chapter, String>() {
+                private final Button button = new Button("Mark as Completed");
+                private final Button deleteButton = new Button("❌ Delete");
+
+                {
+                    button.setOnAction(event -> {
+                        Chapter chapter = getTableRow().getItem();
+                        if (chapter != null) {
+                            markChapterAsCompleted(chapter);
+                            button.setStyle("-fx-background-color: #28a745; -fx-text-fill: white;"); // Green background for completed chapters
+                        }
+                    });
+
+                    deleteButton.setOnAction(event -> {
+                        Chapter chapter = getTableRow().getItem();
+                        if (chapter != null) {
+                            deleteChapter(chapter);
+                        }
+                    });
+                }
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        Chapter chapter = getTableRow().getItem();
+
+                        // Update the button state based on completion status
+                        if (chapter != null) {
+                            if (chapter.isCompleted()) {
+                                button.setStyle("-fx-background-color: #28a745; -fx-text-fill: white;"); // Green color for completed chapter
+                            } else {
+                                button.setStyle(""); // Reset the button style for incomplete chapters
+                            }
+                        }
+
+                        HBox actionBox = new HBox(10, button, deleteButton);  // Place buttons in HBox
+                        setGraphic(actionBox);
+                    }
+                }
+            });
+
+            // Load chapters to the table after marking as completed
+            //loadChapters();  // Re-load the chapters to update their state and reflect changes in the UI
+        }
+
+
+
+
     }
 
+    @FXML
+    private void onAddChapter() {
+        Dialog<Chapter> dialog = new Dialog<>();
+        dialog.setTitle("Add Chapter");
 
+        ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+        // Create input field for chapter name
+        TextField chapterNameField = new TextField();
+
+        VBox vbox = new VBox(10, new Label("Chapter Name:"), chapterNameField);
+        vbox.setStyle("-fx-padding: 10;");
+        dialog.getDialogPane().setContent(vbox);
+
+        dialog.setResultConverter(button -> {
+            if (button == saveBtn) {
+                // Create a new Chapter object with the provided chapter name
+                return new Chapter(0, course.getId(), chapterNameField.getText(), false); // false indicates the chapter is not completed initially
+            }
+            return null;
+        });
+
+        // Show the dialog and handle the result
+        dialog.showAndWait().ifPresent(chapter -> {
+            ChapterDAO.insert(chapter);  // Insert the new chapter into the database
+            loadChapters();  // Reload the chapters table to display the new chapter
+        });
+    }
+
+    private void markChapterAsCompleted(Chapter chapter) {
+        ChapterDAO.updateCompletionStatus(chapter.getId(), true);  // Update the chapter's completion status in the database
+        loadChapters();  // Reload the chapters to reflect the updated status
+    }
+
+    private void loadChapters() {
+        List<Chapter> chapters = ChapterDAO.listByCourse(course.getId());
+        chapterTable.setItems(FXCollections.observableArrayList(chapters));
+
+        // Apply a green color to the rows of completed chapters
+        chapterTable.setRowFactory(tv -> new TableRow<Chapter>() {
+            @Override
+            protected void updateItem(Chapter item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    // If the chapter is marked as completed, change row color to green
+                    if (item.isCompleted()) {
+                        setStyle("-fx-background-color: #d4edda;"); // Light green background
+                    } else {
+                        // Reset to default style for incomplete chapters
+                        setStyle("");
+                    }
+                } else {
+                    // Crucially, reset style for empty rows (reused cells)
+                    setStyle("");
+                }
+            }
+        });
+    }
+
+    private void deleteChapter(Chapter chapter) {
+        if (chapter == null) return;  // Ensure the chapter is not null
+
+        // Confirmation dialog before deleting the chapter
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Are you sure you want to delete this chapter?",
+                ButtonType.YES, ButtonType.NO);
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                // Ensure the chapter has a valid ID before trying to delete
+                if (chapter.getId() > 0) {
+                    ChapterDAO.deleteByCourseId(chapter.getId());  // Delete chapter from DB
+                    loadChapters();  // Reload the chapters table to reflect the changes
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Invalid chapter ID. Deletion failed.").show();
+                }
+            }
+        });
+    }
 
 
     private void openLink(String url) {
@@ -178,7 +313,6 @@ public class CourseDetailController {
             new Alert(Alert.AlertType.ERROR, "Invalid URL").show();
         }
     }
-
 
     private void loadTasks() {
         List<Task> tasks = TaskDAO.listByCourse(course.getId());
@@ -223,8 +357,6 @@ public class CourseDetailController {
             loadResources();  // Reload the resources table to display the new resource
         });
     }
-
-
 
     @FXML
     private void onAddTask() {

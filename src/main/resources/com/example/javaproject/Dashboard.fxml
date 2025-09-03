@@ -61,7 +61,7 @@
                             <Label fx:id="routineHeader" prefHeight="36.0" prefWidth="197.0" style="-fx-padding: 5; -fx-font-size: 20; -fx-font-weight: bold;" text="DAY" />
                         </children>
                     </HBox>
-                    <TilePane fx:id="routineContainer" hgap="10" prefHeight="83.0" prefWidth="604.0" style="-fx-padding: 10;" vgap="10" />
+                    <TilePane fx:id="routineContainer" hgap="10" prefHeight="178.0" prefWidth="604.0" style="-fx-padding: 10;" vgap="10" />
 
                     <!-- Next 3 Days Tasks -->
                     <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;" text="📅 Next 3 Days’ Tasks" />

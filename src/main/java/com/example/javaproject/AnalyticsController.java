@@ -16,158 +16,134 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
-/**
- * Controller for the analytics view. This controller is responsible for
- * generating a weekly bar chart that shows how many minutes were spent
- * studying each course in the selected week. It provides convenience
- * buttons to quickly jump to the current or previous week and exposes
- * a {@link DatePicker} so users can choose any Monday as the starting
- * point for their report. The bar chart will automatically resize its
- * y‑axis based on the largest value in the dataset to ensure that bars
- * never truncate when study sessions exceed the default range.
- */
 public class AnalyticsController {
 
-    @FXML
-    private BarChart<String, Number> studyBarChart;
-    @FXML
-    private DatePicker weekStartPicker;
-    @FXML
-    private ComboBox<Course> courseComboBox;
+    @FXML private BarChart<String, Number> studyBarChart;
+    @FXML private DatePicker weekStartPicker;
+    @FXML private ComboBox<Course> courseComboBox;
 
-    /**
-     * Initialise the controller by selecting the current week, loading
-     * available courses and registering listeners. This method is called
-     * automatically after the FXML file is loaded.
-     */
     @FXML
     public void initialize() {
-        LocalDate today = LocalDate.now();
-        LocalDate monday = today.with(DayOfWeek.MONDAY);
+        // Set current Monday as default week start
+        LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY);
         weekStartPicker.setValue(monday);
 
-        // Populate the course list with a dummy "ALL" entry and real courses.
+        // Load courses (includes an "ALL" sentinel)
         loadCourses();
 
-        weekStartPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                loadChartForWeek(newValue, newValue.plusDays(6)); // Load chart for the selected week
-            }
-        });
-        // Remove automatic refresh when a course is selected
-        // courseComboBox.getSelectionModel().selectedItemProperty().addListener((obs,
-        // oldVal, newVal) -> handleRefresh());
+        // Refresh when week changes
+        weekStartPicker.valueProperty().addListener((obs, oldVal, newVal) -> reloadCurrentWeek());
 
-        // Load the chart for this week by default.
-        loadChartForWeek(monday, monday.plusDays(6));
+        // 🔧 Refresh when course selection changes (this was previously commented out)
+        courseComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> reloadCurrentWeek());
+
+        // Initial chart
+        reloadCurrentWeek();
     }
 
     @FXML
     private void handleThisWeek() {
         LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY);
         weekStartPicker.setValue(monday);
-        loadChartForWeek(monday, monday.plusDays(6));
+        reloadCurrentWeek();
     }
 
     @FXML
     private void handleLastWeek() {
         LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY).minusWeeks(1);
         weekStartPicker.setValue(monday);
-        loadChartForWeek(monday, monday.plusDays(6));
+        reloadCurrentWeek();
     }
 
-    // @FXML
-    // private void handleRefresh() {
-    // LocalDate start = weekStartPicker.getValue();
-    // if (start == null) {
-    // start = LocalDate.now().with(DayOfWeek.MONDAY);
-    // weekStartPicker.setValue(start);
-    // }
-    // loadChartForWeek(start, start.plusDays(6));
-    // }
+    private void reloadCurrentWeek() {
+        LocalDate start = weekStartPicker.getValue();
+        if (start == null) {
+            start = LocalDate.now().with(DayOfWeek.MONDAY);
+            weekStartPicker.setValue(start);
+        }
+        loadChartForWeek(start, start.plusDays(6));
+    }
 
     /**
-     * Query the database and build a chart for the selected week.
-     * If a specific course is selected, filter the results; otherwise,
-     * display totals for all courses.
-     *
-     * @param start start of the week (inclusive)
-     * @param end   end of the week (inclusive)
+     * Build the weekly bar chart; hours on Y, ISO dates on X.
      */
     private void loadChartForWeek(LocalDate start, LocalDate end) {
-        Map<String, Integer> data;
-        Course selectedCourse = courseComboBox.getValue();
+        // Choose data source: all courses vs a specific course
+        Map<String, Integer> raw; // minutes per date string "YYYY-MM-DD"
+        Course selected = courseComboBox.getValue();
 
-        if (selectedCourse != null && selectedCourse.getId() > 0) {
-            // Filter by a specific course
-            data = StudySessionDAO.getWeeklyStudyTimeForCourse(selectedCourse.getId(), start, end);
+        if (selected != null && selected.getId() > 0) {
+            raw = StudySessionDAO.getWeeklyStudyTimeForCourse(selected.getId(), start, end);
         } else {
-            // Aggregate all courses
-            data = StudySessionDAO.getWeeklyStudyTime(start, end);
+            raw = StudySessionDAO.getWeeklyStudyTime(start, end);
+        }
+        if (raw == null) raw = new LinkedHashMap<>();
+
+        // Ensure all seven days exist (fill missing with 0)
+        Map<String, Integer> complete = new LinkedHashMap<>();
+        List<String> categories = new ArrayList<>(7);
+        LocalDate d = start;
+        while (!d.isAfter(end)) {
+            String key = d.toString(); // must match DAO keys
+            complete.put(key, raw.getOrDefault(key, 0));
+            categories.add(key);
+            d = d.plusDays(1);
         }
 
-        // Ensure all days in the week are represented
-        Map<String, Integer> completeData = new LinkedHashMap<>();
-        LocalDate current = start;
-        while (!current.isAfter(end)) {
-            String dateStr = current.toString();
-            completeData.put(dateStr, data.getOrDefault(dateStr, 0));
-            current = current.plusDays(1);
-        }
-
-        // Clear and populate the bar chart
-        studyBarChart.getData().clear();
+        // Prepare series (convert minutes -> fractional hours)
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        double maxMinutes = 0;
-
-        // Convert minutes to fractional hours (use decimal points)
-        for (Map.Entry<String, Integer> entry : completeData.entrySet()) {
-            double hours = entry.getValue() / 60.0; // Fractional hours to handle small sessions
-            series.getData().add(new XYChart.Data<>(entry.getKey(), hours));
-            if (hours > maxMinutes) {
-                maxMinutes = hours;
-            }
+        double maxHours = 0.0;
+        for (Map.Entry<String, Integer> e : complete.entrySet()) {
+            double hours = e.getValue() / 60.0;
+            series.getData().add(new XYChart.Data<>(e.getKey(), hours));
+            if (hours > maxHours) maxHours = hours;
         }
 
+        // Update chart
+        studyBarChart.getData().clear();
         studyBarChart.getData().add(series);
 
-        // Adjust y‑axis range dynamically based on the maximum value
+        // Fix Y-axis bounds (disable auto-range so our bounds apply)
         NumberAxis yAxis = (NumberAxis) studyBarChart.getYAxis();
-        double upperBound = maxMinutes * 1.2; // Add 20% padding to the max value
-        if (upperBound < 1) {
-            upperBound = 1; // Minimum upper bound
-        }
-        yAxis.setUpperBound(upperBound);
-        yAxis.setTickUnit(upperBound / 5); // Adjust tick unit dynamically
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(0);
+        double upper = Math.max(1.0, maxHours * 1.2); // 20% headroom, at least 1
+        yAxis.setUpperBound(upper);
+        yAxis.setTickUnit(Math.max(0.2, upper / 5));
 
-        // Set axis labels and chart title
+        // X-axis ordered categories for the week
         CategoryAxis xAxis = (CategoryAxis) studyBarChart.getXAxis();
+        xAxis.setCategories(FXCollections.observableArrayList(categories));
         xAxis.setLabel("Date");
         yAxis.setLabel("Hours");
-        studyBarChart.setTitle(String.format("Weekly Study Time (Hours) — %s to %s", start, end));
+
+        // Dynamic title (shows course if filtered)
+        String titleSuffix = (selected != null && selected.getId() > 0)
+                ? " — " + selected.getCode() + " (" + selected.getTitle() + ")"
+                : " — All Courses";
+        studyBarChart.setTitle(String.format("Weekly Study Time (Hours) — %s to %s%s", start, end, titleSuffix));
     }
 
     /**
-     * Populate the course dropdown with "ALL" and the actual courses from the
-     * database.
+     * Populate the course dropdown with "ALL" and actual courses.
      */
     private void loadCourses() {
         ObservableList<Course> items = FXCollections.observableArrayList();
-        // Dummy course with id -1 indicates all courses
+        // Sentinel: id = -1 means ALL
         items.add(new Course(-1, "ALL", "All Courses", "", 0));
         items.addAll(CourseDAO.listAll());
         courseComboBox.setItems(items);
         courseComboBox.getSelectionModel().selectFirst();
     }
 
-    /**
-     * Navigate back to the dashboard.
-     */
     @FXML
     private void handleBack() {
         try {

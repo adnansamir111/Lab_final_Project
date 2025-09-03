@@ -1,5 +1,7 @@
-package com.example.javaproject;
+package com.example.javaproject.CONTROLLER;
 
+import com.example.javaproject.DAO.RoutineDAO;
+import com.example.javaproject.all_class.Routine;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +15,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -158,7 +159,7 @@ public class RoutinePageController {
     @FXML
     private void addRoutineEvent() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddRoutinePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/AddRoutinePage.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) addRoutineButton.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -179,7 +180,7 @@ public class RoutinePageController {
     @FXML
     void backtodashboard(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/Dashboard.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) addRoutineButton.getScene().getWindow();
             stage.setScene(new Scene(root));

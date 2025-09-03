@@ -2,6 +2,7 @@ package com.example.javaproject;
 
 
 
+import com.example.javaproject.CONTROLLER.DashboardController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,11 +14,10 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("Dashboard.fxml"));
-        ///FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("CourseView.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
 
-        // Get the controller for the Dashboard
+
         DashboardController dashboardController = fxmlLoader.getController();
 
         // Inject HostServices into the DashboardController

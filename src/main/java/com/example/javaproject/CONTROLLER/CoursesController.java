@@ -1,8 +1,7 @@
-package com.example.javaproject;
-import javafx.application.Application;
+package com.example.javaproject.CONTROLLER;
 import javafx.application.HostServices;
 import com.example.javaproject.all_class.Course;
-import com.example.javaproject.all_class.CourseDAO;
+import com.example.javaproject.DAO.CourseDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -152,7 +151,7 @@ public class CoursesController {
     }
     private void openCourseDetail(Course course) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseDetailView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/CourseDetailView.fxml"));
             Parent root = loader.load();
 
             CourseDetailController controller = loader.getController();
@@ -173,7 +172,7 @@ public class CoursesController {
     @FXML
     void onBack(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/Dashboard.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) courseContainer.getScene().getWindow();

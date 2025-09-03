@@ -1,7 +1,10 @@
-package com.example.javaproject;
+package com.example.javaproject.CONTROLLER;
 
+import com.example.javaproject.DAO.CourseDAO;
+import com.example.javaproject.DAO.RoutineDAO;
+import com.example.javaproject.all_class.Routine;
 import com.example.javaproject.all_class.Task;
-import com.example.javaproject.all_class.TaskDAO;
+import com.example.javaproject.DAO.TaskDAO;
 import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -137,6 +140,14 @@ public class DashboardController {
             Label name = new Label(task.getTitle());
             name.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
+            ///✅ Adding course code
+            int c_id=task.getCourseId();
+            String course_code= CourseDAO.getCourseNameById(c_id);
+            Label c_code=new Label("("+course_code+")");
+            c_code.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+            ///
+
             // ✅ Due Date + Day (bold)
             String dueLabelText = "Due: " + task.getDueAt();
             try {
@@ -153,7 +164,7 @@ public class DashboardController {
             status.setStyle("-fx-font-weight: bold;-fx-text-fill: #444; -fx-font-size: 13px;");
 
             // Add all in one line
-            card.getChildren().addAll(name, due, status);
+            card.getChildren().addAll(name,c_code, due, status);
             taskContainer.getChildren().add(card);
         }
     }
@@ -213,7 +224,7 @@ public class DashboardController {
     @FXML
     private void goToAnalyticsPage() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("AnalyticsView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/javaproject/AnalyticsView.fxml"));
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setMaximized(true);
@@ -228,7 +239,7 @@ public class DashboardController {
     @FXML
     private void goToRoutinePage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("RoutinePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/RoutinePage.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -242,7 +253,7 @@ public class DashboardController {
     @FXML
     private void goToCoursePage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/CourseView.fxml"));
             Parent root = loader.load();
 
             // Get the controller for the CoursesView
@@ -264,7 +275,7 @@ public class DashboardController {
     @FXML
     private void goToTaskExplorerPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("TaskExplorer.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/TaskExplorer.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -278,7 +289,7 @@ public class DashboardController {
     @FXML
     private void goToGradeSheetPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("GradeSheet.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/GradeSheet.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             GradeSheetController controller = loader.getController();

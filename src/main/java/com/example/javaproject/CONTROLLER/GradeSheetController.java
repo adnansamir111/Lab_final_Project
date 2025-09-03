@@ -1,12 +1,10 @@
-package com.example.javaproject;
+package com.example.javaproject.CONTROLLER;
 
 import com.example.javaproject.all_class.Course;
-import com.example.javaproject.all_class.CourseDAO;
+import com.example.javaproject.DAO.CourseDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;

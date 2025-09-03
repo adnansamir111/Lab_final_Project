@@ -12,12 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="700.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.CourseDetailController">
+<BorderPane prefHeight="600.0" prefWidth="700.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.CONTROLLER.CourseDetailController">
 
     <!-- Top Bar -->
     <top>
         <ToolBar prefHeight="40.0" prefWidth="700.0" style="-fx-background-color: #2F4F4F;">
-            <Button onAction="#onBack" styleClass="greenButton" text="⬅ Back" />
             <Label fx:id="lblCourseTitle" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill: white; -fx-padding: 0 10 0 10;" />
         </ToolBar>
     </top>
@@ -115,4 +114,11 @@
 
         </TabPane>
     </center>
+   <bottom>
+      <HBox prefHeight="36.0" prefWidth="700.0" style="-fx-background-color: #2F4F4F;" BorderPane.alignment="CENTER">
+         <children>
+               <Button onAction="#onBack" prefHeight="40.0" prefWidth="94.0" style="-fx-font-weight: bold;" styleClass="greenButton" text="⬅ Back" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

@@ -1,5 +1,9 @@
-package com.example.javaproject;
+package com.example.javaproject.CONTROLLER;
 
+import com.example.javaproject.DAO.CourseDAO;
+import com.example.javaproject.DAO.ResourceDAO;
+import com.example.javaproject.DAO.StudySessionDAO;
+import com.example.javaproject.DAO.TaskDAO;
 import com.example.javaproject.all_class.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -9,11 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.text.Text;
 import javafx.application.HostServices;
 
-import javafx.application.HostServices;
-import java.net.URI;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -50,7 +51,7 @@ public class CourseDetailController {
         try {
             Stage stage = (Stage) lblCourseTitle.getScene().getWindow();
             stage.getScene().setRoot(
-                    javafx.fxml.FXMLLoader.load(getClass().getResource("CourseView.fxml"))
+                    javafx.fxml.FXMLLoader.load(getClass().getResource("/com/example/javaproject/CourseView.fxml"))
             );
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,50 +82,7 @@ public class CourseDetailController {
     @FXML private TableColumn<Resource, String> colTopic;
     @FXML private TableColumn<Resource, String> colVideoLink;
 
-//    @FXML
-//    public void initialize() {
-//        if (taskTable != null) {
-//            colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-//            colDue.setCellValueFactory(new PropertyValueFactory<>("dueAt"));
-//            colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-//            colNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
-//
-//            taskTable.setRowFactory(tv -> new TableRow<>() {
-//                @Override
-//                protected void updateItem(Task item, boolean empty) {
-//                    super.updateItem(item, empty);
-//                    getStyleClass().removeAll("task-done", "task-pending", "task-missed");
-//
-//                    if (item != null && !empty) {
-//                        if ("done".equalsIgnoreCase(item.getStatus())) {
-//                            getStyleClass().add("task-done");
-//                        } else if ("todo".equalsIgnoreCase(item.getStatus()) ||
-//                                "in-progress".equalsIgnoreCase(item.getStatus())) {
-//                            if (item.getDueAt() != null && !item.getDueAt().isEmpty()
-//                                    && LocalDate.parse(item.getDueAt()).isBefore(LocalDate.now())) {
-//                                getStyleClass().add("task-missed"); // overdue
-//                            } else {
-//                                getStyleClass().add("task-pending"); // active
-//                            }
-//                        }
-//                    }
-//                }
-//            });
-//        }
-//
-//        if (sessionTable != null) {
-//            colStart.setCellValueFactory(new PropertyValueFactory<>("startedAt"));
-//            colEnd.setCellValueFactory(new PropertyValueFactory<>("endedAt"));
-//            colDuration.setCellValueFactory(new PropertyValueFactory<>("durationMin"));
-//            colSessionNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
-//        }
-//
-//        if (resourceTable != null) {
-//            colTopic.setCellValueFactory(new PropertyValueFactory<>("topic"));
-//            colVideoLink.setCellValueFactory(new PropertyValueFactory<>("videoLink"));
-//            loadResources();  // Load resources for the current course
-//        }
-//    }
+
 
     @FXML
     public void initialize() {
@@ -196,15 +154,7 @@ public class CourseDetailController {
 
 
 
-    //    private void openLink(String url) {
-//        try {
-//            // Open the URL in the default web browser
-//            HostServices hostServices = getHostServices();
-//            hostServices.showDocument(url);
-//        } catch (Exception e) {
-//            new Alert(Alert.AlertType.ERROR, "Invalid URL").show();
-//        }
-//    }
+
     private void openLink(String url) {
         try {
             String target = (url == null) ? "" : url.trim();

@@ -1,4 +1,4 @@
-package com.example.javaproject;
+package com.example.javaproject.all_class;
 
 public class Resource {
     private int id;

@@ -19,4 +19,8 @@ module com.example.javaproject {
     exports com.example.javaproject;
     exports com.example.javaproject.all_class;
     opens com.example.javaproject.all_class to javafx.fxml;
+    exports com.example.javaproject.DAO;
+    opens com.example.javaproject.DAO to javafx.fxml;
+    exports com.example.javaproject.CONTROLLER;
+    opens com.example.javaproject.CONTROLLER to javafx.fxml;
 }

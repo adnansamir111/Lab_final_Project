@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.TilePane?>
 
-<BorderPane prefHeight="553.0" prefWidth="627.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.CoursesController">
+<BorderPane prefHeight="553.0" prefWidth="627.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.CONTROLLER.CoursesController">
 
     <!-- Top Toolbar -->
     <top>

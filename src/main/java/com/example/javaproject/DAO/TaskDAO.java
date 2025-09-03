@@ -1,6 +1,7 @@
-package com.example.javaproject.all_class;
+package com.example.javaproject.DAO;
 
 import com.example.javaproject.DB;
+import com.example.javaproject.all_class.Task;
 
 import java.sql.*;
 import java.time.LocalDate;

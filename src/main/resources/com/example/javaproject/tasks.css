@@ -222,14 +222,12 @@
 
 //
 .day-label {
-    -fx-background-color:  #2F4F4F;  /* Green background */
+    -fx-background-color: #2F4F4F;  /* Green background */
     -fx-text-fill: white;            /* White text color */
     -fx-font-weight: bold;           /* Bold text */
-    -fx-font-size: 16px;             /* Font size */
-    -fx-padding: 10px 10px;          /* Padding around the text */
+    -fx-font-size: 20px;             /* Font size */
+    -fx-padding: 5px 10px;           /* Padding around the text */
     -fx-background-radius: 6px;      /* Rounded corners */
-    -fx-pref-width: 150px;
-    -fx-border-color: black
 }
 
 //for hbox
@@ -237,6 +235,19 @@
       -fx-background-color:  #D4EDDA;  /* Green background */
       /* Rounded corners */
   }
+
+/* ================================
+   Section Headers
+   ================================ */
+
+.section-header {
+    -fx-background-color: #2F4F4F;  /* Same green as left sidebar */
+    -fx-text-fill: white;            /* White text color */
+    -fx-font-weight: bold;           /* Bold text */
+    -fx-font-size: 20px;             /* Font size */
+    -fx-padding: 5px 10px;           /* Padding around the text */
+    -fx-background-radius: 6px;      /* Rounded corners */
+}
 
 /* ================================
    Notification & Routine Hover Effects
@@ -298,3 +309,29 @@
     -fx-border-color: #a0a0a0 !important;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2) !important;
 }
+
+/* ================================
+   Combined Routine Header
+   ================================ */
+
+.routine-header-container {
+    -fx-background-color: #2F4F4F;  /* Same green as left sidebar */
+    -fx-background-radius: 6px;     /* Rounded corners */
+    -fx-padding: 5px 10px;          /* Padding inside the container */
+    -fx-alignment: CENTER_LEFT;     /* Align content to the left */
+}
+
+.routine-header-text {
+    -fx-text-fill: white;           /* White text color */
+    -fx-font-weight: bold;          /* Bold text */
+    -fx-font-size: 20px;            /* Font size */
+}
+
+.day-label-text {
+    -fx-text-fill: white;           /* White text color */
+    -fx-font-weight: bold;          /* Bold text */
+    -fx-font-size: 20px;            /* Font size */
+    -fx-padding: 0 0 0 5px;         /* Left padding to separate from header text */
+}
+
+/* Remove the old day-label style as it's no longer needed */

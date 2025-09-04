@@ -155,32 +155,31 @@ public class TaskExplorerController {
             endDatePicker.setDisable(true);
         }
     }
-
-    @FXML
-    private void handleSearchByCourse() {
-        String selectedCourse = courseComboBox.getValue();
-
-        if (!"All Courses".equals(selectedCourse)) {
-            int courseId = CourseDAO.getCourseIdByCode(selectedCourse);
-            List<Task> tasks = TaskDAO.listByCourse(courseId);
-            taskTable.setItems(FXCollections.observableArrayList(tasks));
-        } else {
-            loadAllTasks();
-        }
-    }
-
     @FXML
     private void handleSearchByDateRange() {
         String selectedRange = dateRangeComboBox.getValue();
         LocalDate start = null;
         LocalDate end = null;
 
+        // Get the selected course for filtering by course
+        String selectedCourse = courseComboBox.getValue();
+        int courseId = -1;
+        if (!"All Courses".equals(selectedCourse)) {
+            courseId = CourseDAO.getCourseIdByCode(selectedCourse);  // Get course ID if a specific course is selected
+        }
+
         if ("Custom Range".equals(selectedRange)) {
             start = startDatePicker.getValue();
             end = endDatePicker.getValue();
             if (start != null && end != null && !start.isAfter(end)) {
-                List<Task> tasks = TaskDAO.listByDateRange(start.toString(), end.toString());
-                taskTable.setItems(FXCollections.observableArrayList(tasks));
+                // Filter tasks by both course and date range
+                if (courseId != -1) {
+                    List<Task> tasks = TaskDAO.listByCourseAndDateRange(courseId, start.toString(), end.toString());
+                    taskTable.setItems(FXCollections.observableArrayList(tasks));
+                } else {
+                    List<Task> tasks = TaskDAO.listByDateRange(start.toString(), end.toString());
+                    taskTable.setItems(FXCollections.observableArrayList(tasks));
+                }
             } else {
                 new Alert(Alert.AlertType.WARNING, "Please select a valid date range").showAndWait();
             }
@@ -190,6 +189,46 @@ public class TaskExplorerController {
             handleNextWeek();
         }
     }
+
+    @FXML
+    private void handleSearchByCourse() {
+        String selectedCourse = courseComboBox.getValue();
+        int courseId = -1;
+        if (!"All Courses".equals(selectedCourse)) {
+            courseId = CourseDAO.getCourseIdByCode(selectedCourse);  // Get course ID if a specific course is selected
+        }
+
+        String selectedRange = dateRangeComboBox.getValue();
+        LocalDate start = null;
+        LocalDate end = null;
+
+        // Handle course and date range filtering
+        if ("Custom Range".equals(selectedRange)) {
+            start = startDatePicker.getValue();
+            end = endDatePicker.getValue();
+            if (start != null && end != null && !start.isAfter(end)) {
+                // Filter tasks by both course and date range
+                if (courseId != -1) {
+                    List<Task> tasks = TaskDAO.listByCourseAndDateRange(courseId, start.toString(), end.toString());
+                    taskTable.setItems(FXCollections.observableArrayList(tasks));
+                } else {
+                    List<Task> tasks = TaskDAO.listByDateRange(start.toString(), end.toString());
+                    taskTable.setItems(FXCollections.observableArrayList(tasks));
+                }
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Please select a valid date range").showAndWait();
+            }
+        } else {
+            if (courseId != -1) {
+                List<Task> tasks = TaskDAO.listByCourse(courseId);  // Filter by course only
+                taskTable.setItems(FXCollections.observableArrayList(tasks));
+            } else {
+                loadAllTasks();  // Load all tasks if no course is selected
+            }
+        }
+    }
+
+
     @FXML
     void handleback(ActionEvent event) {
         try {

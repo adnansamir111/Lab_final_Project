@@ -150,7 +150,6 @@
 .redButton:hover {
     -fx-background-color: #D32F2F;
     -fx-effect: dropshadow(gaussian, #000000, 10, 0.5, 0, 2);
-
 }
 .redButton:focused {
     -fx-background-color: #D32F2F;
@@ -220,7 +219,7 @@
     -fx-background-color: #FF1A1A; /* Slightly darker red on hover */
 }
 
-//
+/* Day label */
 .day-label {
     -fx-background-color:  #2F4F4F;  /* Green background */
     -fx-text-fill: white;            /* White text color */
@@ -232,11 +231,11 @@
     -fx-border-color: black;
 }
 
-//for hbox
-  .hb-row{
-      -fx-background-color:  #D4EDDA;  /* Green background */
-      /* Rounded corners */
-  }
+/* For hbox */
+.hb-row{
+    -fx-background-color:  #D4EDDA;  /* Green background */
+    /* Rounded corners */
+}
 
 /* ================================
    Section Headers
@@ -337,3 +336,40 @@
 }
 
 /* Remove the old day-label style as it's no longer needed */
+
+
+/* ================================
+   This Week and Last Week Button Styles
+   ================================ */
+
+/* This Week Button */
+.this-week-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-effect: dropshadow(gaussian, #000000, 8, 0.5, 0, 2);
+}
+
+.this-week-button:hover {
+    -fx-background-color: #388E3C;
+    -fx-effect: dropshadow(gaussian, #000000, 10, 0.5, 0, 2);
+}
+
+/* Last Week Button */
+.last-week-button {
+    -fx-background-color: #FFEB3B;
+    -fx-text-fill: black;
+    -fx-background-radius: 5;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 10px;
+    -fx-effect: dropshadow(gaussian, #000000, 8, 0.5, 0, 2);
+}
+
+.last-week-button:hover {
+    -fx-background-color: #FBC02D;
+    -fx-effect: dropshadow(gaussian, #000000, 10, 0.5, 0, 2);
+}

@@ -27,15 +27,18 @@
             <!-- Week filter row -->
             <HBox alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="901.0" spacing="10" style="-fx-background-color: white;">
                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="104.0" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-background-color: #2F4F4F; -fx-background-radius: 5;" text="Week starting:">
-               <font>
-                  <Font size="14.0" />
-               </font></Label>
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
                 <DatePicker fx:id="weekStartPicker" style="-fx-font-size: 14px;" />
-                <Button onAction="#handleThisWeek" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #2F4F4F;" text="This Week">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-                <Button onAction="#handleLastWeek" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #2F4F4F;" text="Last Week" />
+                <!-- Updated button with hover effect classes -->
+                <Button onAction="#handleThisWeek" styleClass="greenButton" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #2F4F4F;" text="This Week">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+                <Button onAction="#handleLastWeek" styleClass="greenButton" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #2F4F4F;" text="Last Week" />
                 <Region HBox.hgrow="ALWAYS" />
             </HBox>
             <!-- Course selection row -->
@@ -57,11 +60,14 @@
             </yAxis>
         </BarChart>
     </center>
-   <bottom>
-      <HBox prefHeight="14.0" prefWidth="900.0" style="-fx-background-color: #2F4F4F;" BorderPane.alignment="CENTER">
-         <children>
+
+    <!-- Bottom Section -->
+    <bottom>
+        <HBox prefHeight="14.0" prefWidth="900.0" style="-fx-background-color: #2F4F4F;" BorderPane.alignment="CENTER">
+            <children>
                 <Button onAction="#handleBack" prefHeight="30.0" prefWidth="81.0" style="-fx-text-fill: white; -fx-padding: 5 12; -fx-font-weight: bold;" styleClass="greenButton" text="Back" />
-         </children>
-      </HBox>
-   </bottom>
+            </children>
+        </HBox>
+    </bottom>
+
 </BorderPane>

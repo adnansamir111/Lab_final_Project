@@ -42,9 +42,9 @@
 
             <!-- New GradeSheet button with hover effect -->
             <Button onAction="#goToGradeSheetPage" prefHeight="40.0" prefWidth="160.0" styleClass="dashboard-button" text="Go to GradeSheet">
-            <font>
-               <Font name="Arial Black" size="12.0" />
-            </font></Button>
+                <font>
+                    <Font name="Arial Black" size="12.0" />
+                </font></Button>
 
         </VBox>
     </left>
@@ -54,17 +54,16 @@
         <ScrollPane fitToWidth="true" prefHeight="700.0" prefWidth="700.0">
             <content>
                 <VBox style="-fx-padding: 20; -fx-background-color: #f4f4f4; -fx-spacing: 5;">
-                    <HBox prefHeight="23.0" prefWidth="685.0" style="-fx-padding: 0;">
-                        <children>
-                            <!-- Today's Routine -->
-                            <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;" text="Today's Routine" />
-                            <Label fx:id="routineHeader" prefHeight="36.0" prefWidth="197.0" style="-fx-padding: 5; -fx-font-size: 20; -fx-font-weight: bold;" text="DAY" />
-                        </children>
+                    <!-- Combined Today's Routine Header -->
+                    <HBox alignment="CENTER_LEFT" prefWidth="10000.0" styleClass="routine-header-container">
+                        <Label styleClass="routine-header-text" text="Today's Routine" />
+                        <Label fx:id="routineHeader" styleClass="day-label-text" text="DAY" />
                     </HBox>
+
                     <TilePane fx:id="routineContainer" hgap="10" prefHeight="178.0" prefWidth="604.0" style="-fx-padding: 10;" vgap="10" />
 
                     <!-- Next 3 Days Tasks -->
-                    <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;" text="📅 Next 3 Days’ Tasks" />
+                    <Label prefHeight="40.0" prefWidth="10000.0" styleClass="section-header" text="📅 Next 3 Days' Tasks" />
                     <ScrollPane fitToWidth="true" prefHeight="231.0" prefWidth="617.0" style="-fx-background-color: transparent;">
                         <content>
                             <VBox fx:id="taskContainer" spacing="12" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
@@ -74,7 +73,7 @@
 
                     <!-- Notifications Panel -->
                     <HBox alignment="CENTER_LEFT" spacing="20">
-                        <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="🔔 Notifications" />
+                        <Label prefWidth="10000.0" styleClass="section-header" text="🔔 Notifications" />
                     </HBox>
                     <ScrollPane fitToWidth="true" prefHeight="259.0" prefWidth="604.0" style="-fx-background-color: transparent;">
                         <content>

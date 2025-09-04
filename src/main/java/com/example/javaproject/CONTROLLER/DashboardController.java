@@ -61,7 +61,7 @@ public class DashboardController {
 
         // Update the header label dynamically (you should have fx:id for routine header in FXML)
         routineHeader.setText(" "+todayName);
-        routineHeader.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;");
+        //routineHeader.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;");
 
         // Clear previous routines
         routineContainer.getChildren().clear();
@@ -88,6 +88,9 @@ public class DashboardController {
         card.setPrefWidth(200);
         card.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 12; "
                 + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);");
+
+        // Add routine-item style class for hover effects
+        card.getStyleClass().add("routine-item");
 
         // Course Name
         Label courseName = new Label(routine.getCourseName());
@@ -121,6 +124,9 @@ public class DashboardController {
             card.setStyle("-fx-background-radius: 8; -fx-padding: 10; "
                     + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);");
 
+            // Add task-item style class for hover effects
+            card.getStyleClass().add("task-item");
+
             // ✅ Background color by status
             String bgColor;
             if ("done".equalsIgnoreCase(task.getStatus())) {
@@ -130,9 +136,7 @@ public class DashboardController {
             } else if ("in-progress".equalsIgnoreCase(task.getStatus())) {
                 bgColor = "#cce5ff"; // soft blue
             } else {
-
-                    bgColor = "#e2e3e5"; // fallback
-
+                bgColor = "#e2e3e5"; // fallback
             }
             card.setStyle(card.getStyle() + "-fx-background-color: " + bgColor + ";");
 
@@ -201,6 +205,9 @@ public class DashboardController {
             HBox notifBox = new HBox(15);
             notifBox.setStyle("-fx-font-weight: bold; -fx-background-color: " + (unseen ? "#dec3c3;" : "#f5f5f5;") +
                     "-fx-padding: 8; -fx-background-radius: 8;");
+
+            // Add notification-item style class for hover effects
+            notifBox.getStyleClass().add("notification-item");
 
             Label msg = new Label(notifText + " (Due: " + task.getDueAt() + ")");
             msg.setStyle("-fx-font-size: 14px;");

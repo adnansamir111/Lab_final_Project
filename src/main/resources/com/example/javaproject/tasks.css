@@ -150,6 +150,7 @@
 .redButton:hover {
     -fx-background-color: #D32F2F;
     -fx-effect: dropshadow(gaussian, #000000, 10, 0.5, 0, 2);
+
 }
 .redButton:focused {
     -fx-background-color: #D32F2F;
@@ -180,6 +181,7 @@
     -fx-background-color: #08306B; /* Deep navy on press */
     -fx-effect: dropshadow(gaussian, #000000, 12, 0.6, 0, 2);
 }
+
 
 /* Dashboard Button Styles */
 
@@ -218,7 +220,7 @@
     -fx-background-color: #FF1A1A; /* Slightly darker red on hover */
 }
 
-/* Day label */
+//
 .day-label {
     -fx-background-color:  #2F4F4F;  /* Green background */
     -fx-text-fill: white;            /* White text color */
@@ -230,8 +232,108 @@
     -fx-border-color: black;
 }
 
-/* For hbox */
-.hb-row {
-    -fx-background-color:  #D4EDDA;  /* Green background */
-    /* Rounded corners */
+//for hbox
+  .hb-row{
+      -fx-background-color:  #D4EDDA;  /* Green background */
+      /* Rounded corners */
+  }
+
+/* ================================
+   Section Headers
+   ================================ */
+
+.section-header {
+    -fx-background-color: #2F4F4F;  /* Same green as left sidebar */
+    -fx-text-fill: white;            /* White text color */
+    -fx-font-weight: bold;           /* Bold text */
+    -fx-font-size: 20px;             /* Font size */
+    -fx-padding: 5px 10px;           /* Padding around the text */
+    -fx-background-radius: 6px;      /* Rounded corners */
 }
+
+/* ================================
+   Notification & Routine Hover Effects
+   ================================ */
+
+/* Notification item hover effect - More specific selector */
+.notification-item {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 6;
+    -fx-padding: 12;
+    -fx-border-radius: 6;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.notification-item:hover {
+    -fx-background-color: #f0f8ff !important;
+    -fx-border-color: #a0c5e8 !important;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2) !important;
+}
+
+/* Routine item hover effect - More specific selector */
+.routine-item {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-padding: 12;
+    -fx-border-radius: 6;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.routine-item:hover {
+    -fx-background-color: #fff0f5 !important;
+    -fx-border-color: #ffb6c1 !important;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2) !important;
+}
+
+/* ================================
+   Task Item Hover Effects (Next 3 Days' Tasks)
+   ================================ */
+
+/* Task item hover effect */
+.task-item {
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-border-radius: 8;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.task-item:hover {
+    -fx-background-color: #f5f5f5 !important;
+    -fx-border-color: #a0a0a0 !important;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2) !important;
+}
+
+/* ================================
+   Combined Routine Header
+   ================================ */
+
+.routine-header-container {
+    -fx-background-color: #2F4F4F;  /* Same green as left sidebar */
+    -fx-background-radius: 6px;     /* Rounded corners */
+    -fx-padding: 5px 10px;          /* Padding inside the container */
+    -fx-alignment: CENTER_LEFT;     /* Align content to the left */
+}
+
+.routine-header-text {
+    -fx-text-fill: white;           /* White text color */
+    -fx-font-weight: bold;          /* Bold text */
+    -fx-font-size: 20px;            /* Font size */
+}
+
+.day-label-text {
+    -fx-text-fill: white;           /* White text color */
+    -fx-font-weight: bold;          /* Bold text */
+    -fx-font-size: 20px;            /* Font size */
+    -fx-padding: 0 0 0 5px;         /* Left padding to separate from header text */
+}
+
+/* Remove the old day-label style as it's no longer needed */

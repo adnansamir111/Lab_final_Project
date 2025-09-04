@@ -206,15 +206,15 @@
 }
 
 //dismiss button
-.dismiss-button {
-    -fx-background-color: #FF4C4C; /* Red background color */
-    -fx-text-fill: white;          /* White text */
-    -fx-font-size: 14px;           /* Smaller font size */
-    -fx-padding: 5px 10px;         /* Smaller padding */
-    -fx-border-radius: 5px;       /* Rounded corners */
-    -fx-border-color: #e0e0e0;    /* Optional border color */
-    -fx-border-width: 1px;        /* Optional border width */
-}
+  .dismiss-button {
+      -fx-background-color: #FF4C4C; /* Red background color */
+      -fx-text-fill: white;          /* White text */
+      -fx-font-size: 14px;           /* Smaller font size */
+      -fx-padding: 5px 10px;         /* Smaller padding */
+      -fx-border-radius: 5px;       /* Rounded corners */
+      -fx-border-color: #e0e0e0;    /* Optional border color */
+      -fx-border-width: 1px;        /* Optional border width */
+  }
 
 .dismiss-button:hover {
     -fx-background-color: #FF1A1A; /* Slightly darker red on hover */
@@ -233,7 +233,68 @@
 }
 
 //for hbox
-.hb-row{
-    -fx-background-color:  #D4EDDA;  /* Green background */
-        /* Rounded corners */
+  .hb-row{
+      -fx-background-color:  #D4EDDA;  /* Green background */
+      /* Rounded corners */
+  }
+
+/* ================================
+   Notification & Routine Hover Effects
+   ================================ */
+
+/* Notification item hover effect - More specific selector */
+.notification-item {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 6;
+    -fx-padding: 12;
+    -fx-border-radius: 6;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.notification-item:hover {
+    -fx-background-color: #f0f8ff !important;
+    -fx-border-color: #a0c5e8 !important;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2) !important;
+}
+
+/* Routine item hover effect - More specific selector */
+.routine-item {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-padding: 12;
+    -fx-border-radius: 6;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.routine-item:hover {
+    -fx-background-color: #fff0f5 !important;
+    -fx-border-color: #ffb6c1 !important;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2) !important;
+}
+
+/* ================================
+   Task Item Hover Effects (Next 3 Days' Tasks)
+   ================================ */
+
+/* Task item hover effect */
+.task-item {
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-border-radius: 8;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.task-item:hover {
+    -fx-background-color: #f5f5f5 !important;
+    -fx-border-color: #a0a0a0 !important;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2) !important;
 }

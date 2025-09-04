@@ -42,9 +42,9 @@
 
             <!-- New GradeSheet button with hover effect -->
             <Button onAction="#goToGradeSheetPage" prefHeight="40.0" prefWidth="160.0" styleClass="dashboard-button" text="Go to GradeSheet">
-            <font>
-               <Font name="Arial Black" size="12.0" />
-            </font></Button>
+                <font>
+                    <Font name="Arial Black" size="12.0" />
+                </font></Button>
 
         </VBox>
     </left>

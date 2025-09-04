@@ -14,27 +14,26 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600" prefWidth="900.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.TaskExplorerController">
+<BorderPane prefHeight="600" prefWidth="900.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.CONTROLLER.TaskExplorerController">
 
     <!-- Top Section for Filters -->
     <top>
         <HBox prefHeight="76.0" prefWidth="922.0" spacing="10" style="-fx-padding: 10; -fx-background-color: #2F4F4F;"> <!-- DatePicker initially disabled -->
 
             <!-- Course Dropdown -->
-            <Label prefHeight="27.0" prefWidth="76.0" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: white;" text="Course:" HBox.hgrow="ALWAYS">
+            <Label prefHeight="27.0" prefWidth="76.0" style="-fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: white; -fx-border-radius: 10; -fx-background-color: white; -fx-background-radius: 5;" text="Course:" HBox.hgrow="ALWAYS">
                 <HBox.margin>
                     <Insets />
                 </HBox.margin></Label>
             <ComboBox fx:id="courseComboBox" prefHeight="25.0" prefWidth="123.0" HBox.hgrow="ALWAYS" />
 
             <!-- Quick Filter ComboBox (This Week, Next Week, Custom Range) -->
-            <Label prefHeight="25.0" prefWidth="67.0" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: white;" text="Select " HBox.hgrow="ALWAYS" />
+            <Label prefHeight="25.0" prefWidth="67.0" style="-fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: white; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 5;" text="Select " HBox.hgrow="ALWAYS" />
             <ComboBox fx:id="dateRangeComboBox" prefHeight="25.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="This Week" />
                         <String fx:value="Next Week" />
-                        <String fx:value="Last Week" />
                         <String fx:value="Custom Range" />
                     </FXCollections>
                 </items>
@@ -47,13 +46,13 @@
                     <DatePicker fx:id="startDatePicker" disable="true" />
                 </HBox>
                 <HBox spacing="5" VBox.vgrow="ALWAYS">
-                    <Label style="-fx-text-fill: white;" text="To:" />
+                    <Label style="-fx-text-fill: white;" text="To:    " />
                     <DatePicker fx:id="endDatePicker" disable="true" />
                 </HBox>
             </VBox>
 
             <!-- Filter Buttons -->
-            <Button onAction="#handleSearchByDateRange" prefHeight="25.0" prefWidth="87.0" style="-fx-font-weight: bold;" text="Search" wrapText="true" HBox.hgrow="ALWAYS" />
+            <Button onAction="#handleSearchByDateRange" prefHeight="25.0" prefWidth="87.0" style="-fx-font-weight: bold;" text="🔎Search" wrapText="true" HBox.hgrow="ALWAYS" />
             <Button onAction="#handleClearFilters" prefHeight="25.0" prefWidth="111.0" style="-fx-font-weight: bold;" text="Clear Filters" HBox.hgrow="ALWAYS" />
         </HBox>
     </top>

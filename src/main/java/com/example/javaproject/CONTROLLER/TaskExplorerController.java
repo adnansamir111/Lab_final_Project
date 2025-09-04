@@ -1,8 +1,8 @@
-package com.example.javaproject;
+package com.example.javaproject.CONTROLLER;
 
-import com.example.javaproject.all_class.CourseDAO;
+import com.example.javaproject.DAO.CourseDAO;
 import com.example.javaproject.all_class.Task;
-import com.example.javaproject.all_class.TaskDAO;
+import com.example.javaproject.DAO.TaskDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,10 +14,6 @@ import javafx.collections.FXCollections;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
@@ -79,6 +75,8 @@ public class TaskExplorerController {
                         getStyleClass().add("task-pending");
                     } else if ("missed".equalsIgnoreCase(item.getStatus())) {
                         getStyleClass().add("task-missed");
+                    }else if ("in-progress".equalsIgnoreCase(item.getStatus())) {
+                        getStyleClass().add("task-pending");
                     }
                 }
             }
@@ -195,7 +193,7 @@ public class TaskExplorerController {
     @FXML
     void handleback(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/Dashboard.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) customRangeBox.getScene().getWindow();

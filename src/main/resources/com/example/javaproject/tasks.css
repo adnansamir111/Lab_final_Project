@@ -201,3 +201,18 @@
     -fx-border-color: #3b0404;
     -fx-effect: dropshadow(gaussian, #3b0404, 10, 0.7, 0, 0);
 }
+
+//dismiss button
+.dismiss-button {
+    -fx-background-color: #FF4C4C; /* Red background color */
+    -fx-text-fill: white;          /* White text */
+    -fx-font-size: 14px;           /* Smaller font size */
+    -fx-padding: 5px 10px;         /* Smaller padding */
+    -fx-border-radius: 5px;       /* Rounded corners */
+    -fx-border-color: #e0e0e0;    /* Optional border color */
+    -fx-border-width: 1px;        /* Optional border width */
+}
+
+.dismiss-button:hover {
+    -fx-background-color: #FF1A1A; /* Slightly darker red on hover */
+}

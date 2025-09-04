@@ -12,10 +12,15 @@ module com.example.javaproject {
     requires com.almasb.fxgl.all;
 
     requires java.sql;
+    requires java.desktop;
     //requires org.sqlite.jdbc;   // ✅ add this for SQLite
 
     opens com.example.javaproject to javafx.fxml;
     exports com.example.javaproject;
     exports com.example.javaproject.all_class;
     opens com.example.javaproject.all_class to javafx.fxml;
+    exports com.example.javaproject.DAO;
+    opens com.example.javaproject.DAO to javafx.fxml;
+    exports com.example.javaproject.CONTROLLER;
+    opens com.example.javaproject.CONTROLLER to javafx.fxml;
 }

@@ -1,8 +1,8 @@
-package com.example.javaproject;
+package com.example.javaproject.CONTROLLER;
 
 import com.example.javaproject.all_class.Course;
-import com.example.javaproject.all_class.CourseDAO;
-import com.example.javaproject.all_class.StudySessionDAO;
+import com.example.javaproject.DAO.CourseDAO;
+import com.example.javaproject.DAO.StudySessionDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -147,7 +147,7 @@ public class AnalyticsController {
     @FXML
     private void handleBack() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("Dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/javaproject/Dashboard.fxml"));
             Stage stage = (Stage) studyBarChart.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setMaximized(true);

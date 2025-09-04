@@ -1,7 +1,7 @@
-package com.example.javaproject;
-
+package com.example.javaproject.CONTROLLER;
+import javafx.application.HostServices;
 import com.example.javaproject.all_class.Course;
-import com.example.javaproject.all_class.CourseDAO;
+import com.example.javaproject.DAO.CourseDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +15,12 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class CoursesController {
+
+    private HostServices hostServices;
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
 
     @FXML
     private TilePane courseContainer;
@@ -145,10 +151,13 @@ public class CoursesController {
     }
     private void openCourseDetail(Course course) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseDetailView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/CourseDetailView.fxml"));
             Parent root = loader.load();
 
             CourseDetailController controller = loader.getController();
+            ///changing
+            controller.setHostServices(this.hostServices);
+
             controller.setCourse(course);
 
             Stage stage = (Stage) courseContainer.getScene().getWindow();
@@ -163,7 +172,7 @@ public class CoursesController {
     @FXML
     void onBack(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/Dashboard.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) courseContainer.getScene().getWindow();

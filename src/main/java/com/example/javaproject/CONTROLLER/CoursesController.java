@@ -102,6 +102,9 @@ public class CoursesController {
         dialog.setTitle("Add Course");
         dialog.setHeaderText("Enter course details");
 
+
+
+
         // Dialog buttons
         ButtonType addBtnType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(addBtnType, ButtonType.CANCEL);

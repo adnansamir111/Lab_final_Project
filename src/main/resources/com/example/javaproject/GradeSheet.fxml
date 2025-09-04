@@ -32,9 +32,9 @@
                         <TableColumn fx:id="colMid" prefWidth="120.0" text="Mid" />
                         <TableColumn fx:id="colFinal" prefWidth="120.0" text="Final" />
                     </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
                 </TableView>
             </children>
             <padding>

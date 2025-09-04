@@ -1,7 +1,11 @@
-package com.example.javaproject;
+package com.example.javaproject.CONTROLLER;
 
+import com.example.javaproject.DAO.CourseDAO;
+import com.example.javaproject.DAO.RoutineDAO;
+import com.example.javaproject.all_class.Routine;
 import com.example.javaproject.all_class.Task;
-import com.example.javaproject.all_class.TaskDAO;
+import com.example.javaproject.DAO.TaskDAO;
+import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +24,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class DashboardController {
+
+    private HostServices hostServices;
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
 
     @FXML
     private TilePane routineContainer; // Today's routine
@@ -68,7 +78,7 @@ public class DashboardController {
         // If no classes today
         if (routines.isEmpty()) {
             Label emptyMsg = new Label("✅ No classes today!");
-            emptyMsg.setStyle("-fx-text-fill: #888; -fx-font-size: 14px; -fx-font-style: italic;");
+            emptyMsg.setStyle("-fx-font-weight:bold; -fx-text-fill: #888; -fx-font-size: 14px; -fx-font-style: italic;");
             routineContainer.getChildren().add(emptyMsg);
         }
     }
@@ -79,17 +89,20 @@ public class DashboardController {
         card.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 12; "
                 + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);");
 
+        // Add routine-item style class for hover effects
+        card.getStyleClass().add("routine-item");
+
         // Course Name
         Label courseName = new Label(routine.getCourseName());
         courseName.setStyle("-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #2F4F4F;");
 
         // Time Range
         Label time = new Label("🕒 " + routine.getStartTime() + " - " + routine.getEndTime());
-        time.setStyle("-fx-text-fill: #555; -fx-font-size: 13px;");
+        time.setStyle("--fx-font-weight: bold;fx-text-fill: black; -fx-font-size: 15px;");
 
         // Room
         Label room = new Label("Room- " + routine.getRoom());
-        room.setStyle("-fx-text-fill: #666; -fx-font-size: 13px;");
+        room.setStyle("-fx-font-weight: bold;-fx-text-fill: black; -fx-font-size: 13px;");
 
         card.getChildren().addAll(courseName, time, room);
         return card;
@@ -99,14 +112,20 @@ public class DashboardController {
     private void loadUpcomingTasks() {
         if (taskContainer == null)
             return;
+
         taskContainer.getChildren().clear();
 
-        List<Task> tasks = TaskDAO.getUpcomingTasks(3);
+        LocalDate currentDate = LocalDate.now(); // Get today's date
+        LocalDate endDate = currentDate.plusDays(3); // Calculate 3 days from today
+
+        List<Task> tasks = TaskDAO.getUpcomingTasks(currentDate, endDate); // Pass the date range to fetch the tasks
         for (Task task : tasks) {
             HBox card = new HBox(30); // spacing between fields
             card.setStyle("-fx-background-radius: 8; -fx-padding: 10; "
                     + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);");
 
+            // Add task-item style class for hover effects
+            card.getStyleClass().add("task-item");
 
             // ✅ Background color by status
             String bgColor;
@@ -117,26 +136,21 @@ public class DashboardController {
             } else if ("in-progress".equalsIgnoreCase(task.getStatus())) {
                 bgColor = "#cce5ff"; // soft blue
             } else {
-                // check overdue
-                try {
-                    LocalDate dueDate = LocalDate.parse(task.getDueAt());
-                    if (dueDate.isBefore(LocalDate.now())) {
-                        bgColor = "#f8d7da"; // soft red
-                    } else {
-                        bgColor = "#e2e3e5"; // neutral gray
-                    }
-                } catch (Exception e) {
-                    bgColor = "#e2e3e5"; // fallback
-                }
+                bgColor = "#e2e3e5"; // fallback
             }
             card.setStyle(card.getStyle() + "-fx-background-color: " + bgColor + ";");
 
             // ✅ Title (bold)
             Label name = new Label(task.getTitle());
-
-
             name.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
+            ///✅ Adding course code
+            int c_id=task.getCourseId();
+            String course_code= CourseDAO.getCourseNameById(c_id);
+            Label c_code=new Label("("+course_code+")");
+            c_code.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+            ///
 
             // ✅ Due Date + Day (bold)
             String dueLabelText = "Due: " + task.getDueAt();
@@ -151,13 +165,14 @@ public class DashboardController {
 
             // ✅ Status
             Label status = new Label("Status: " + task.getStatus());
-            status.setStyle("-fx-text-fill: #444; -fx-font-size: 13px;");
+            status.setStyle("-fx-font-weight: bold;-fx-text-fill: #444; -fx-font-size: 13px;");
 
             // Add all in one line
-            card.getChildren().addAll(name, due, status);
+            card.getChildren().addAll(name,c_code, due, status);
             taskContainer.getChildren().add(card);
         }
     }
+
 
 
     // ==================== Notifications ====================
@@ -175,26 +190,30 @@ public class DashboardController {
             boolean isThreeDays = false;
 
             if (task.getDueAt().equals(today)) {
-                notifText = "⚠️ Today is the deadline for: " + task.getTitle();
+                notifText = "⚠️Today is the deadline for : " + task.getTitle();
                 isThreeDays = false;
             } else if (task.getDueAt().equals(threeDaysLater)) {
-                notifText = "⏰ Upcoming deadline in 3 days: " + task.getTitle();
+                notifText = "⏰Upcoming deadline in 3 days : " + task.getTitle();
                 isThreeDays = true;
             } else {
-                notifText = "🔔 Task Reminder: " + task.getTitle();
+                notifText = "🔔Task Reminder : " + task.getTitle();
             }
 
             boolean unseen = (isThreeDays && task.getSeen3Days() == 0) ||
                     (!isThreeDays && task.getSeenDayOf() == 0);
 
             HBox notifBox = new HBox(15);
-            notifBox.setStyle("-fx-background-color: " + (unseen ? "#e6f0ff;" : "#f5f5f5;") +
+            notifBox.setStyle("-fx-font-weight: bold; -fx-background-color: " + (unseen ? "#dec3c3;" : "#f5f5f5;") +
                     "-fx-padding: 8; -fx-background-radius: 8;");
+
+            // Add notification-item style class for hover effects
+            notifBox.getStyleClass().add("notification-item");
 
             Label msg = new Label(notifText + " (Due: " + task.getDueAt() + ")");
             msg.setStyle("-fx-font-size: 14px;");
 
-            Button dismissBtn = new Button("Dismiss");
+            Button dismissBtn = new Button("❌ Dismiss");
+            dismissBtn.getStyleClass().add("dismiss-button");
             boolean finalIsThreeDays = isThreeDays;
             dismissBtn.setOnAction(e -> {
                 TaskDAO.markAsSeen(task.getId(), finalIsThreeDays);
@@ -212,7 +231,7 @@ public class DashboardController {
     @FXML
     private void goToAnalyticsPage() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("AnalyticsView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/javaproject/AnalyticsView.fxml"));
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setMaximized(true);
@@ -227,7 +246,7 @@ public class DashboardController {
     @FXML
     private void goToRoutinePage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("RoutinePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/RoutinePage.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -241,12 +260,19 @@ public class DashboardController {
     @FXML
     private void goToCoursePage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/CourseView.fxml"));
             Parent root = loader.load();
+
+            // Get the controller for the CoursesView
+            CoursesController coursesController = loader.getController();
+
+            // Pass the HostServices to the CoursesController
+            coursesController.setHostServices(this.hostServices);
             Stage stage = (Stage) routineContainer.getScene().getWindow();
 
-            stage.setScene(new Scene(root));
-            stage.setMaximized(true);
+            stage.setScene(new Scene(root,stage.getWidth(),stage.getHeight()));
+
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -256,7 +282,7 @@ public class DashboardController {
     @FXML
     private void goToTaskExplorerPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("TaskExplorer.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/TaskExplorer.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -266,11 +292,11 @@ public class DashboardController {
         }
     }
 
-    // ✅ New GradeSheet navigation
+    // GradeSheet navigation
     @FXML
     private void goToGradeSheetPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("GradeSheet.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/GradeSheet.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) routineContainer.getScene().getWindow();
             GradeSheetController controller = loader.getController();

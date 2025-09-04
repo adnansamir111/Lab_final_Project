@@ -1,8 +1,10 @@
-package com.example.javaproject.all_class;
+package com.example.javaproject.DAO;
 
 import com.example.javaproject.DB;
+import com.example.javaproject.all_class.Task;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 
 public class TaskDAO {
@@ -24,14 +26,16 @@ public class TaskDAO {
     }
 
     // ==================== Upcoming Tasks ====================
-    public static List<Task> getUpcomingTasks(int days) {
+
+    public static List<Task> getUpcomingTasks(LocalDate startDate, LocalDate endDate) {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT * FROM task " +
-                "WHERE DATE(due_at) BETWEEN DATE('now') AND DATE('now', '+' || ? || ' days') " +
+                "WHERE DATE(due_at) BETWEEN ? AND ? " + // Replaced dynamic SQL logic
                 "ORDER BY due_at";
         try (Connection conn = DB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, days);
+            ps.setString(1, startDate.toString());  // Set the start date
+            ps.setString(2, endDate.toString());    // Set the end date
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 tasks.add(mapResultSet(rs));
@@ -42,18 +46,46 @@ public class TaskDAO {
         return tasks;
     }
 
+
     // ==================== Notifications ====================
+//    public static List<Task> getDueReminders() {
+//        List<Task> tasks = new ArrayList<>();
+//        String sql = """
+//            SELECT * FROM task
+//            WHERE (DATE(due_at) = DATE('now') AND seen_dayof = 0)
+//               OR (DATE(due_at) = DATE('now', '+3 days') AND seen_3days = 0)
+//            ORDER BY due_at
+//        """;
+//        try (Connection conn = DB.getConnection();
+//             Statement st = conn.createStatement();
+//             ResultSet rs = st.executeQuery(sql)) {
+//            while (rs.next()) {
+//                tasks.add(mapResultSet(rs));
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return tasks;
+//    }
+
     public static List<Task> getDueReminders() {
         List<Task> tasks = new ArrayList<>();
+        String today = LocalDate.now().toString();  // Get today's date
+        String threeDaysLater = LocalDate.now().plusDays(3).toString();  // Get the date 3 days from today
+
         String sql = """
-            SELECT * FROM task
-            WHERE (DATE(due_at) = DATE('now') AND seen_dayof = 0)
-               OR (DATE(due_at) = DATE('now', '+3 days') AND seen_3days = 0)
-            ORDER BY due_at
-        """;
+        SELECT * FROM task
+        WHERE (DATE(due_at) = ? AND seen_dayof = 0)
+           OR (DATE(due_at) = ? AND seen_3days = 0)
+        ORDER BY due_at
+    """;
+
         try (Connection conn = DB.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, today);
+            ps.setString(2, threeDaysLater);
+
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 tasks.add(mapResultSet(rs));
             }
@@ -62,6 +94,7 @@ public class TaskDAO {
         }
         return tasks;
     }
+
 
     // ==================== Mark Notification Seen ====================
     public static void markAsSeen(int id, boolean isThreeDays) {

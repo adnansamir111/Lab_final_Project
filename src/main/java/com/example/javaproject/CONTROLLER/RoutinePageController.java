@@ -1,5 +1,7 @@
-package com.example.javaproject;
+package com.example.javaproject.CONTROLLER;
 
+import com.example.javaproject.DAO.RoutineDAO;
+import com.example.javaproject.all_class.Routine;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +15,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -77,14 +78,14 @@ public class RoutinePageController {
         }
     }
 
-    // Clicking it confirms & deletes just that entry.
+    ///Clicking it confirms & deletes just that entry.
     @FXML
     private void addRoutineToDay(HBox dayHBox, Routine routine) {
         // Base content (existing card style)
         VBox content = new VBox(4);
         content.setPadding(new Insets(8));
         content.setAlignment(Pos.CENTER_LEFT);
-        content.setStyle("-fx-background-color: #FAFAFA; -fx-border-color: #E0E0E0; -fx-border-radius: 6; -fx-background-radius: 6;");
+        content.setStyle("-fx-background-color: #bfffc2; -fx-border-color: black; -fx-border-radius: 6; -fx-background-radius: 6;");
 
         Label courseLabel = new Label(safe(routine.getCourseName())
                 + ((routine.getRoom() != null && !routine.getRoom().isEmpty()) ? " (" + routine.getRoom() + ")" : ""));
@@ -111,20 +112,16 @@ public class RoutinePageController {
         StackPane.setAlignment(deleteBtn, Pos.TOP_RIGHT);
         StackPane.setMargin(deleteBtn, new Insets(4));
 
-        // Hover behaviour
+        /// Hover behaviour
         card.setOnMouseEntered(e -> deleteBtn.setVisible(true));
         card.setOnMouseExited(e -> deleteBtn.setVisible(false));
 
-        // Add alternating background colors for aesthetic
-        int index = dayHBox.getChildren().size();
-        String color = (index % 2 == 0) ? "#F1F1F1" : "#EDEDED"; // Alternating colors
-        content.setStyle("-fx-background-color: " + color + "; -fx-border-color: #E0E0E0; -fx-border-radius: 6; -fx-background-radius: 6;");
 
-        // Set a fixed width for each card
-        card.setPrefWidth(200);  // Set your desired fixed width here, e.g., 200px
+        ///fixed width
+        card.setPrefWidth(200);
 
-        // Adjust the margin for each event card to ensure uniform spacing
-        HBox.setMargin(card, new Insets(5));  // Add consistent margin around each card
+        ///Adjust the margin for each event card to ensure uniform spacing
+        HBox.setMargin(card, new Insets(3));  // Add consistent margin around each card
 
         // Delete handler (confirm → delete one matching row → refresh)
         deleteBtn.setOnAction(e -> {
@@ -158,7 +155,7 @@ public class RoutinePageController {
     @FXML
     private void addRoutineEvent() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddRoutinePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/AddRoutinePage.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) addRoutineButton.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -179,7 +176,7 @@ public class RoutinePageController {
     @FXML
     void backtodashboard(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javaproject/Dashboard.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) addRoutineButton.getScene().getWindow();
             stage.setScene(new Scene(root));

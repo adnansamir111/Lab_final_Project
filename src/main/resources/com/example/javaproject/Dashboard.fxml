@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="900.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.DashboardController">
+<BorderPane prefHeight="741.0" prefWidth="900.0" stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.CONTROLLER.DashboardController">
 
     <!-- Sidebar (Left side) -->
     <left>
@@ -17,12 +17,12 @@
             <!-- Use styleClass to apply CSS hover effect -->
             <Button onAction="#goToRoutinePage" prefHeight="40.0" prefWidth="134.0" styleClass="dashboard-button" text="Go to Routine">
                 <font>
-                    <Font name="System Bold" size="12.0" />
+                    <Font name="Arial Black" size="12.0" />
                 </font>
             </Button>
             <Button onAction="#goToCoursePage" prefHeight="40.0" prefWidth="134.0" styleClass="dashboard-button" text="Go to COURSE" wrapText="true">
                 <font>
-                    <Font name="Arial Bold" size="12.0" />
+                    <Font name="Arial Black" size="12.0" />
                 </font>
             </Button>
 
@@ -35,13 +35,16 @@
             <Button onAction="#goToAnalyticsPage" prefHeight="40.0" prefWidth="125.0" styleClass="dashboard-button" text="Analytics">
 
                 <font>
-                    <Font name="System Bold" size="12.0" />
+                    <Font name="Arial Black" size="12.0" />
                 </font>
             </Button>
 
 
             <!-- New GradeSheet button with hover effect -->
-            <Button onAction="#goToGradeSheetPage" prefHeight="40.0" prefWidth="160.0" styleClass="dashboard-button" text="Go to GradeSheet" />
+            <Button onAction="#goToGradeSheetPage" prefHeight="40.0" prefWidth="160.0" styleClass="dashboard-button" text="Go to GradeSheet">
+                <font>
+                    <Font name="Arial Black" size="12.0" />
+                </font></Button>
 
         </VBox>
     </left>
@@ -58,7 +61,7 @@
                             <Label fx:id="routineHeader" prefHeight="36.0" prefWidth="197.0" style="-fx-padding: 5; -fx-font-size: 20; -fx-font-weight: bold;" text="DAY" />
                         </children>
                     </HBox>
-                    <TilePane fx:id="routineContainer" hgap="10" prefHeight="80.0" prefWidth="685.0" style="-fx-padding: 10;" vgap="10" />
+                    <TilePane fx:id="routineContainer" hgap="10" prefHeight="178.0" prefWidth="604.0" style="-fx-padding: 10;" vgap="10" />
 
                     <!-- Next 3 Days Tasks -->
                     <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;" text="📅 Next 3 Days’ Tasks" />
@@ -73,7 +76,7 @@
                     <HBox alignment="CENTER_LEFT" spacing="20">
                         <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="🔔 Notifications" />
                     </HBox>
-                    <ScrollPane fitToWidth="true" prefHeight="150" style="-fx-background-color: transparent;">
+                    <ScrollPane fitToWidth="true" prefHeight="259.0" prefWidth="604.0" style="-fx-background-color: transparent;">
                         <content>
                             <VBox fx:id="notificationContainer" spacing="12" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5,0,0,2);">
                             </VBox>

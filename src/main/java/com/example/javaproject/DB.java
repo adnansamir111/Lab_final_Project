@@ -11,7 +11,7 @@ public final class DB {
             String url = "jdbc:sqlite:./database/student_assistant.db";
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
-            //ENABLE FOREIGN KEY
+            ///Enabling FOREIGN KEY
             try (Statement st = conn.createStatement()) {
                 st.executeUpdate("PRAGMA foreign_keys = ON;");
             }
@@ -37,8 +37,7 @@ public final class DB {
                 );
             """);
 
-
-                        // Tasks Table with Cascading Delete + notification fields
+            // Tasks Table with Cascading Delete + notification fields
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS task (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,12 +55,12 @@ public final class DB {
                 );
             """);
 
-            // If task table already exists, try adding missing columns
+            ///If task table already exists, try adding missing columns
             try { st.executeUpdate("ALTER TABLE task ADD COLUMN seen_3days INTEGER DEFAULT 0"); } catch (SQLException ignored) {}
             try { st.executeUpdate("ALTER TABLE task ADD COLUMN seen_dayof INTEGER DEFAULT 0"); } catch (SQLException ignored) {}
             try { st.executeUpdate("ALTER TABLE task ADD COLUMN completed_at TEXT"); } catch (SQLException ignored) {}
 
-            // Study Session Table with Cascading Delete
+            /// Study Session Table with Cascading Delete
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS study_session (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -74,7 +73,7 @@ public final class DB {
                 );
             """);
 
-            // Routine Events Table (No Cascading for now)
+            ///Routine Events Table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS routine_events (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -85,6 +84,30 @@ public final class DB {
                   day_of_week TEXT NOT NULL -- e.g., MONDAY, TUESDAY, etc.
                 );
             """);
+
+
+            /// Resource Table for storing resources topic, video link related to courses
+            st.executeUpdate("""
+                CREATE TABLE IF NOT EXISTS resources (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  course_id INTEGER NOT NULL,  -- Reference to course.id
+                  topic TEXT NOT NULL,
+                  video_link TEXT NOT NULL,
+                  FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE  -- Foreign key referencing course.id
+                );
+            """);
+
+            /// Chapter Table for storing chapters related to courses
+            st.executeUpdate("""
+            CREATE TABLE IF NOT EXISTS chapters (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              course_id INTEGER NOT NULL,  -- Reference to course.id
+              chapter_name TEXT NOT NULL,
+              is_completed BOOLEAN DEFAULT FALSE,  -- Mark if chapter is completed
+              FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE  -- Foreign key referencing course.id
+            );
+        """);
+
         }
     }
 }

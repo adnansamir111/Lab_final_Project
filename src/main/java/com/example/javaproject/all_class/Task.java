@@ -1,5 +1,6 @@
 package com.example.javaproject.all_class;
 
+import com.example.javaproject.DAO.CourseDAO;
 import javafx.beans.property.*;
 
 public class Task {

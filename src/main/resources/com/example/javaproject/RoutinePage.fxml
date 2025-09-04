@@ -7,8 +7,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="10" prefHeight="700.0" prefWidth="700.0" style="-fx-background-color: #F4F4F4; -fx-padding: 20;" stylesheets="@tasks.css" vgap="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.CONTROLLER.RoutinePageController">
+<GridPane alignment="CENTER" hgap="10" prefHeight="672.0" prefWidth="700.0" style="-fx-background-color: white; -fx-padding: 20;" stylesheets="@tasks.css" vgap="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javaproject.CONTROLLER.RoutinePageController">
 
     <columnConstraints>
         <ColumnConstraints halignment="LEFT" minWidth="100" prefWidth="120" />
@@ -27,30 +28,33 @@
     </rowConstraints>
 
     <!-- Day labels -->
-    <Label style="-fx-font-weight: bold; -fx-font-size: 16; -fx-padding: 10;" text="Monday" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.valignment="TOP" />
-    <Label style="-fx-font-weight: bold; -fx-font-size: 16; -fx-padding: 10;" text="Tuesday" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-    <Label style="-fx-font-weight: bold; -fx-font-size: 16; -fx-padding: 10;" text="Wednesday" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-    <Label style="-fx-font-weight: bold; -fx-font-size: 16; -fx-padding: 10;" text="Thursday" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.valignment="TOP" />
-    <Label style="-fx-font-weight: bold; -fx-font-size: 16; -fx-padding: 10;" text="Friday" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.valignment="TOP" />
-    <Label style="-fx-font-weight: bold; -fx-font-size: 16; -fx-padding: 10;" text="Saturday" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.valignment="TOP" />
-    <Label style="-fx-font-weight: bold; -fx-font-size: 16; -fx-padding: 10;" text="Sunday" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.valignment="TOP" />
+    <Label alignment="CENTER" prefHeight="71.0" prefWidth="100.0" styleClass="day-label" text="Monday" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.valignment="TOP" />
+    <Label alignment="CENTER" prefHeight="70.0" prefWidth="111.0" styleClass="day-label" text="Tuesday" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+    <Label alignment="CENTER" prefHeight="70.0" prefWidth="115.0" styleClass="day-label" text="Wednesday" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.valignment="TOP">
+      <font>
+         <Font size="10.0" />
+      </font></Label>
+    <Label alignment="CENTER" prefHeight="70.0" prefWidth="107.0" styleClass="day-label" text="Thursday" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+    <Label alignment="CENTER" prefHeight="70.0" prefWidth="105.0" styleClass="day-label" text="Friday" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.valignment="TOP" />
+    <Label alignment="CENTER" prefHeight="70.0" prefWidth="106.0" styleClass="day-label" text="Saturday" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+    <Label alignment="CENTER" prefHeight="72.0" prefWidth="100.0" styleClass="day-label" text="Sunday" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.valignment="TOP" />
 
     <!-- Day content containers -->
-    <HBox fx:id="mondayHBox" spacing="10" style="-fx-padding: 10; -fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-radius: 5; -fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.valignment="TOP" />
-    <HBox fx:id="tuesdayHBox" spacing="10" style="-fx-padding: 10; -fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-radius: 5; -fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-    <HBox fx:id="wednesdayHBox" spacing="10" style="-fx-padding: 10; -fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-radius: 5; -fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-    <HBox fx:id="thursdayHBox" spacing="10" style="-fx-padding: 10; -fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-radius: 5; -fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP" />
-    <HBox fx:id="fridayHBox" spacing="10" style="-fx-padding: 10; -fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-radius: 5; -fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.valignment="TOP" />
-    <HBox fx:id="saturdayHBox" spacing="10" style="-fx-padding: 10; -fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-radius: 5; -fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="TOP" />
-    <HBox fx:id="sundayHBox" spacing="10" style="-fx-padding: 10; -fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-radius: 5; -fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.valignment="TOP" />
+    <HBox fx:id="mondayHBox" spacing="10" styleClass="hb-row" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.valignment="TOP" />
+    <HBox fx:id="tuesdayHBox" spacing="10" styleClass="hb-row" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+    <HBox fx:id="wednesdayHBox" spacing="10" styleClass="hb-row" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+    <HBox fx:id="thursdayHBox" spacing="10" styleClass="hb-row" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+    <HBox fx:id="fridayHBox" spacing="10" styleClass="hb-row" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.valignment="TOP" />
+    <HBox fx:id="saturdayHBox" spacing="10" styleClass="hb-row" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+    <HBox fx:id="sundayHBox" prefHeight="58.0" prefWidth="550.0" spacing="10" styleClass="hb-row" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.valignment="TOP" />
 
     <!-- Bottom action group (Add + Back) -->
-    <HBox prefHeight="80.0" prefWidth="941.0" style="-fx-padding: 10; -fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-radius: 5; -fx-background-radius: 5;" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="7">
-        <VBox prefHeight="60.0" prefWidth="272.0" spacing="8">
+    <HBox minHeight="0.0" prefHeight="93.0" prefWidth="660.0" style="-fx-background-color: white;" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="7">
+        <VBox minHeight="20.0" prefHeight="42.0" prefWidth="272.0" spacing="8" style="-fx-background-color: white;">
             <children>
-                <Button fx:id="addRoutineButton" onAction="#addRoutineEvent" styleClass="blueButton" text="Add Routine Event" />
-
-                <Button fx:id="back" onAction="#backtodashboard" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" styleClass="greenButton" text="Back" />
+                <Button fx:id="addRoutineButton" onAction="#addRoutineEvent" prefHeight="40.0" prefWidth="143.0" styleClass="blueButton" text="Add Routine Event" />
+      
+                <Button fx:id="back" minHeight="30.0" onAction="#backtodashboard" prefHeight="30.0" prefWidth="74.0" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: GREEN;" text="Back" />
             </children>
         </VBox>
     </HBox>

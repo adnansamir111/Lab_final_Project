@@ -97,6 +97,7 @@
 .greenButton {
     -fx-background-color: #4CAF50;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
     -fx-background-radius: 5;
     -fx-font-size: 14px;
     -fx-padding: 10px 20px;
@@ -120,7 +121,8 @@
     -fx-text-fill: black;
     -fx-background-radius: 5;
     -fx-font-size: 14px;
-    -fx-padding: 10px 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 10px;
     -fx-effect: dropshadow(gaussian, #000000, 8, 0.5, 0, 2);
 }
 .yellowButton:hover {
@@ -139,9 +141,10 @@
 .redButton {
     -fx-background-color: #E53935;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
     -fx-background-radius: 5;
     -fx-font-size: 14px;
-    -fx-padding: 10px 20px;
+    -fx-padding: 10px 10px;
     -fx-effect: dropshadow(gaussian, #000000, 8, 0.5, 0, 2);
 }
 .redButton:hover {
@@ -164,7 +167,7 @@
     -fx-background-radius: 5;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-padding: 10px 20px;
+    -fx-padding: 10px 10px;
     -fx-effect: dropshadow(gaussian, #000000, 8, 0.5, 0, 2);
 }
 .blueButton:hover {
@@ -215,4 +218,22 @@
 
 .dismiss-button:hover {
     -fx-background-color: #FF1A1A; /* Slightly darker red on hover */
+}
+
+//
+.day-label {
+    -fx-background-color:  #2F4F4F;  /* Green background */
+    -fx-text-fill: white;            /* White text color */
+    -fx-font-weight: bold;           /* Bold text */
+    -fx-font-size: 16px;             /* Font size */
+    -fx-padding: 10px 10px;          /* Padding around the text */
+    -fx-background-radius: 6px;      /* Rounded corners */
+    -fx-pref-width: 150px;
+    -fx-border-color: black
+}
+
+//for hbox
+.hb-row{
+    -fx-background-color:  #D4EDDA;  /* Green background */
+        /* Rounded corners */
 }

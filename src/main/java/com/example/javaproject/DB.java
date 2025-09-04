@@ -11,7 +11,7 @@ public final class DB {
             String url = "jdbc:sqlite:./database/student_assistant.db";
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
-            //ENABLE FOREIGN KEY
+            ///Enabling FOREIGN KEY
             try (Statement st = conn.createStatement()) {
                 st.executeUpdate("PRAGMA foreign_keys = ON;");
             }
@@ -55,12 +55,12 @@ public final class DB {
                 );
             """);
 
-            // If task table already exists, try adding missing columns
+            ///If task table already exists, try adding missing columns
             try { st.executeUpdate("ALTER TABLE task ADD COLUMN seen_3days INTEGER DEFAULT 0"); } catch (SQLException ignored) {}
             try { st.executeUpdate("ALTER TABLE task ADD COLUMN seen_dayof INTEGER DEFAULT 0"); } catch (SQLException ignored) {}
             try { st.executeUpdate("ALTER TABLE task ADD COLUMN completed_at TEXT"); } catch (SQLException ignored) {}
 
-            // Study Session Table with Cascading Delete
+            /// Study Session Table with Cascading Delete
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS study_session (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -73,7 +73,7 @@ public final class DB {
                 );
             """);
 
-            // Routine Events Table (No Cascading for now)
+            ///Routine Events Table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS routine_events (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,7 +86,7 @@ public final class DB {
             """);
 
 
-            // Resource Table for storing resources (topic, video link) related to courses
+            /// Resource Table for storing resources topic, video link related to courses
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS resources (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -97,7 +97,7 @@ public final class DB {
                 );
             """);
 
-            // Chapter Table for storing chapters related to courses
+            /// Chapter Table for storing chapters related to courses
             st.executeUpdate("""
             CREATE TABLE IF NOT EXISTS chapters (
               id INTEGER PRIMARY KEY AUTOINCREMENT,

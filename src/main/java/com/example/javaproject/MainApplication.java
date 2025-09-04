@@ -20,7 +20,7 @@ public class MainApplication extends Application {
 
         DashboardController dashboardController = fxmlLoader.getController();
 
-        // Inject HostServices into the DashboardController
+        /// Inject HostServices into the DashboardController for using links
         dashboardController.setHostServices(getHostServices());
 
         stage.setTitle("Study_Buddy");
@@ -32,6 +32,7 @@ public class MainApplication extends Application {
     }
 
     public static void main(String[] args) {
+
         launch();
     }
 }

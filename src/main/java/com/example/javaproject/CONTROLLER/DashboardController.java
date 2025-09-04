@@ -61,7 +61,7 @@ public class DashboardController {
 
         // Update the header label dynamically (you should have fx:id for routine header in FXML)
         routineHeader.setText(" "+todayName);
-        routineHeader.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;");
+        //routineHeader.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 5;");
 
         // Clear previous routines
         routineContainer.getChildren().clear();

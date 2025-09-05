@@ -39,39 +39,146 @@ public class GradeSheetController {
         this.parent = parent;
     }
 
-    @FXML
-    private void initialize() {
-        // Show course CODE in the first column (acts as visual "Course ID")
-        colCourseId.setCellValueFactory(cd -> cd.getValue().codeProperty());
+//    @FXML
+//    private void initialize() {
+//        // Show course CODE in the first column (acts as visual "Course ID")
+//        colCourseId.setCellValueFactory(cd -> cd.getValue().codeProperty());
+//
+//        colQuiz1.setCellValueFactory(cd -> cd.getValue().quiz1Property().asObject());
+//        colQuiz2.setCellValueFactory(cd -> cd.getValue().quiz2Property().asObject());
+//        colQuiz3.setCellValueFactory(cd -> cd.getValue().quiz3Property().asObject());
+//        colQuiz4.setCellValueFactory(cd -> cd.getValue().quiz4Property().asObject());
+//        colMid.setCellValueFactory(  cd -> cd.getValue().midProperty().asObject());
+//        colFinal.setCellValueFactory(cd -> cd.getValue().finProperty().asObject());
+//
+//        // Editable numeric cells
+//        tableGrade.setEditable(true);
+//        DoubleStringConverter dsc = new DoubleStringConverter();
+//
+//        colQuiz1.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
+//        colQuiz2.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
+//        colQuiz3.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
+//        colQuiz4.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
+//        colMid.setCellFactory(  TextFieldTableCell.forTableColumn(dsc));
+//        colFinal.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
+//
+//        // Persist immediately on edit
+//        colQuiz1.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz1(safe(e.getNewValue()))));
+//        colQuiz2.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz2(safe(e.getNewValue()))));
+//        colQuiz3.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz3(safe(e.getNewValue()))));
+//        colQuiz4.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz4(safe(e.getNewValue()))));
+//        colMid.setOnEditCommit(  e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setMid(safe(e.getNewValue()))));
+//        colFinal.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setFin(safe(e.getNewValue()))));
+//
+//        reload();
+//    }
+@FXML
+private void initialize() {
+    // Show course CODE in the first column (acts as visual "Course ID")
+    colCourseId.setCellValueFactory(cd -> cd.getValue().codeProperty());
 
-        colQuiz1.setCellValueFactory(cd -> cd.getValue().quiz1Property().asObject());
-        colQuiz2.setCellValueFactory(cd -> cd.getValue().quiz2Property().asObject());
-        colQuiz3.setCellValueFactory(cd -> cd.getValue().quiz3Property().asObject());
-        colQuiz4.setCellValueFactory(cd -> cd.getValue().quiz4Property().asObject());
-        colMid.setCellValueFactory(  cd -> cd.getValue().midProperty().asObject());
-        colFinal.setCellValueFactory(cd -> cd.getValue().finProperty().asObject());
+    colQuiz1.setCellValueFactory(cd -> cd.getValue().quiz1Property().asObject());
+    colQuiz2.setCellValueFactory(cd -> cd.getValue().quiz2Property().asObject());
+    colQuiz3.setCellValueFactory(cd -> cd.getValue().quiz3Property().asObject());
+    colQuiz4.setCellValueFactory(cd -> cd.getValue().quiz4Property().asObject());
+    colMid.setCellValueFactory(cd -> cd.getValue().midProperty().asObject());
+    colFinal.setCellValueFactory(cd -> cd.getValue().finProperty().asObject());
 
-        // Editable numeric cells
-        tableGrade.setEditable(true);
-        DoubleStringConverter dsc = new DoubleStringConverter();
+    // Editable numeric cells
+    tableGrade.setEditable(true);
+    DoubleStringConverter dsc = new DoubleStringConverter();
 
-        colQuiz1.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
-        colQuiz2.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
-        colQuiz3.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
-        colQuiz4.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
-        colMid.setCellFactory(  TextFieldTableCell.forTableColumn(dsc));
-        colFinal.setCellFactory(TextFieldTableCell.forTableColumn(dsc));
+    // Set cell factory with bold effect on number input
+    colQuiz1.setCellFactory(param -> new TextFieldTableCell<Course, Double>(dsc) {
+        @Override
+        public void updateItem(Double item, boolean empty) {
+            super.updateItem(item, empty);
+            if (!empty) {
+                if (item != null && item != 0.0) {
+                    setStyle("-fx-font-weight: bold;");
+                } else {
+                    setStyle("-fx-font-weight: normal;");
+                }
+            }
+        }
+    });
+    colQuiz2.setCellFactory(param -> new TextFieldTableCell<Course, Double>(dsc) {
+        @Override
+        public void updateItem(Double item, boolean empty) {
+            super.updateItem(item, empty);
+            if (!empty) {
+                if (item != null && item != 0.0) {
+                    setStyle("-fx-font-weight: bold;");
+                } else {
+                    setStyle("-fx-font-weight: normal;");
+                }
+            }
+        }
+    });
+    colQuiz3.setCellFactory(param -> new TextFieldTableCell<Course, Double>(dsc) {
+        @Override
+        public void updateItem(Double item, boolean empty) {
+            super.updateItem(item, empty);
+            if (!empty) {
+                if (item != null && item != 0.0) {
+                    setStyle("-fx-font-weight: bold;");
+                } else {
+                    setStyle("-fx-font-weight: normal;");
+                }
+            }
+        }
+    });
+    colQuiz4.setCellFactory(param -> new TextFieldTableCell<Course, Double>(dsc) {
+        @Override
+        public void updateItem(Double item, boolean empty) {
+            super.updateItem(item, empty);
+            if (!empty) {
+                if (item != null && item != 0.0) {
+                    setStyle("-fx-font-weight: bold;");
+                } else {
+                    setStyle("-fx-font-weight: normal;");
+                }
+            }
+        }
+    });
+    colMid.setCellFactory(param -> new TextFieldTableCell<Course, Double>(dsc) {
+        @Override
+        public void updateItem(Double item, boolean empty) {
+            super.updateItem(item, empty);
+            if (!empty) {
+                if (item != null&& item!=0.0) {
+                    setStyle("-fx-font-weight: bold;");
+                } else {
+                    setStyle("-fx-font-weight: normal;");
+                }
+            }
+        }
+    });
+    colFinal.setCellFactory(param -> new TextFieldTableCell<Course, Double>(dsc) {
+        @Override
+        public void updateItem(Double item, boolean empty) {
+            super.updateItem(item, empty);
+            if (!empty) {
+                if (item != null && item != 0.0) {
+                    setStyle("-fx-font-weight: bold;");
+                } else {
+                    setStyle("-fx-font-weight: normal;");
+                }
+            }
+        }
+    });
 
-        // Persist immediately on edit
-        colQuiz1.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz1(safe(e.getNewValue()))));
-        colQuiz2.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz2(safe(e.getNewValue()))));
-        colQuiz3.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz3(safe(e.getNewValue()))));
-        colQuiz4.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz4(safe(e.getNewValue()))));
-        colMid.setOnEditCommit(  e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setMid(safe(e.getNewValue()))));
-        colFinal.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setFin(safe(e.getNewValue()))));
+    // Persist immediately on edit
+    colQuiz1.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz1(safe(e.getNewValue()))));
+    colQuiz2.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz2(safe(e.getNewValue()))));
+    colQuiz3.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz3(safe(e.getNewValue()))));
+    colQuiz4.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setQuiz4(safe(e.getNewValue()))));
+    colMid.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setMid(safe(e.getNewValue()))));
+    colFinal.setOnEditCommit(e -> commitAndSave(e.getRowValue(), () -> e.getRowValue().setFin(safe(e.getNewValue()))));
 
-        reload();
-    }
+    reload();
+}
+
 
     private double safe(Double v) { return v == null ? 0.0 : v; }
 

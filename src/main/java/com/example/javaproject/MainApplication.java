@@ -23,7 +23,7 @@ public class MainApplication extends Application {
         /// Inject HostServices into the DashboardController for using links
         dashboardController.setHostServices(getHostServices());
 
-        stage.setTitle("Study_Buddy");
+        stage.setTitle("STUDY_SYNC");
         stage.setScene(scene);
         //stage.centerOnScreen();
         stage.setMaximized(true);
